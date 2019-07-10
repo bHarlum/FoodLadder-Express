@@ -1,5 +1,4 @@
-const UserModel = require("./../database/models/user_model");
-const ProjectModel = require("./../database/models/project_model");
+const ThreadModel = require("./../database/models/thread_model");
 
 function index(req, res) {
 
@@ -25,11 +24,15 @@ function create(req, res) {
 
 }
 
+function destroy(req, res) {
+
+}
+
 module.exports = {
   index,
   show,
   edit,
   update,
   make,
-  create
-}
+  destroy
+} 
