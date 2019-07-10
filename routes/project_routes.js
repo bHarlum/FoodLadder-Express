@@ -8,9 +8,9 @@ router.get("/:id", ProjectController.show);
 
 router.get("/:id/edit", ProjectController.edit);
 router.put("/:id/update", ProjectController.update);
-router.patch("/:d/update", ProjectController.update);
+router.patch("/:id/update", ProjectController.update);
 
-router.get("/new", ProjectController.new);
+router.get("/new", ProjectController.make);
 router.post("/", ProjectController.create);
 
 module.exports = router;

@@ -1,35 +1,21 @@
 const UserModel = require("./../database/models/user_model");
 const ProjectModel = require("./../database/models/project_model");
 
-function index(req, res) {
-
-}
-
 function show(req, res) {
-
+  return res.send("Notifications show");
 }
 
-function edit(req, res) {
-
-}
-
-function update(req, res) {
-
-}
-
-function make(req, res) {
-
-}
 
 function create(req, res) {
 
 }
 
+function destroy(req, res) {
+
+}
+
 module.exports = {
-  index,
   show,
-  edit,
-  update,
-  make,
-  create
+  create,
+  destroy
 }

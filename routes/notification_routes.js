@@ -3,10 +3,8 @@ const router = express.Router();
 
 const NotificationController = require("./../controllers/notification_controller");
 
-router.get("/", NotificationController.index);
 router.get("/:id", NotificationController.show);
-
-router.get("/new", NotificationController.new);
 router.post("/", NotificationController.create);
+router.delete("/:id", NotificationController.destroy);
 
 module.exports = router;
