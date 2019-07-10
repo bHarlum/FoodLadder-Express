@@ -1,4 +1,5 @@
 const {Schema} = require("mongoose");
+const NotificationSchema = require("./notification_schema");
 
 
 const projectSchema = new Schema({
@@ -31,7 +32,7 @@ const projectSchema = new Schema({
     },
 
     userId: {
-      // TODO::: could be of Type ObjectId #####
+      // TODO: could be of Type ObjectId #####
       type: String,
       default: null,
     }
@@ -68,6 +69,15 @@ const projectSchema = new Schema({
     },
 
   },
+
+  reportDate: {
+    type: Date,
+    // Add default: (Date.now + month )to create first reporting date.
+  },
+
+  reports: [ReportSchema],
+
+  notifications: [NotificationSchema],
 
   createdAt: {
     type: Date,

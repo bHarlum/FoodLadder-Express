@@ -1,4 +1,5 @@
 const {Schema} = require("mongoose");
+const NotificationSchema = require("./notification_schema");
 
 
 const UserSchema = new Schema({
@@ -31,6 +32,8 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+
+  notifactions: [NotificationSchema],
   
   createdAt: {
     type: Date,
