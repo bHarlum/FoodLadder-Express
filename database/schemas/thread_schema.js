@@ -10,17 +10,21 @@ const ThreadSchema = new Schema({
 
   posts: [PostSchema],
 
-  author: {
-    name: {
-      type: String,
-      required: true,
-    },
-    authorId: {
-      type: String,
-    }
+  views: {
+    type: Number,
+    default: 0,
   },
 
-  ceatedAt: {
+  pinnedPost: {
+    type: String,
+  },
+
+  upvotes: {
+    type: Number,
+    default: 0,
+  },
+
+  createdAt: {
     type: Date,
     default: Date.now,
   }
