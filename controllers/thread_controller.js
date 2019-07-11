@@ -24,10 +24,6 @@ async function update(req, res) {
   }
 }
 
-function make(req, res) {
-  return res.send("Thread make");
-}
-
 function create(req, res) {
   return res.send("Thread create");
 }
@@ -40,7 +36,6 @@ module.exports = {
   index,
   show,
   update,
-  make,
   create,
   destroy
 } 

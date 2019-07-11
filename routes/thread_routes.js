@@ -9,7 +9,6 @@ router.get("/:id", ThreadController.show);
 router.put("/:id/update", ThreadController.update);
 router.patch("/:id/update", ThreadController.update);
 
-router.get("/new", ThreadController.make);
 router.post("/", ThreadController.create);
 
 router.delete("/:id", ThreadController.destroy);
