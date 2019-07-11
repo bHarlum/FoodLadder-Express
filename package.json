@@ -7,13 +7,14 @@
     "test": "jest --coverage",
     "seed": "node database/seeds",
     "dev-server": "nodemon index.js",
-    "server": "forever -c \"nodemon --exitcrash -L\" index.js"
+    "server": "forever -c \"nodemon --exitcrash -L\" index.js",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "forever": "^0.15.3",
-    "jest": "^23.6.0",
+    "jest": "^24.8.0",
     "nodemon": "^1.18.7",
     "supertest": "^3.3.0"
   },
