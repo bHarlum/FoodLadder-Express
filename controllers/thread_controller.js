@@ -47,15 +47,15 @@ async function create(req, res) {
   // Checks to see if newThread has a value.
   if (newThread){
     try {
-      const thread = await ThreadModel.insertOne(newThread);
+      const thread = await ThreadModel.create(newThread);
       response = "Success! Thread created.";
     }
     catch (error) {
       response = customErrorMessage(error);;
-      console.log(response);
     }
   } else response = "no value found for 'newThread'."
 
+  console.log(response);
   res.send(response);
 }
 
