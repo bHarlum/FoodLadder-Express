@@ -30,4 +30,4 @@ const ThreadSchema = new Schema({
   }
 })
 
-module.exports = threadSchema;
+module.exports = ThreadSchema;

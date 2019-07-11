@@ -1,15 +1,14 @@
-const UserModel = require("./../database/models/user_model");
+const ThreadModel = require("./../database/models/thread_model");
 
-function index(req, res) {
-  return res.send("Thread index");
+async function index(req, res) {
+  // get all threads
+  const threads = await ThreadModel.find();
+  threads.length == 0 ? res.send("Oh no! There doesn't seem to be any threads. ¯\\_(ツ)_/¯") : res.send(threads);
 }
 
-function show(req, res) {
-  return res.send("Thread show");
-}
-
-function edit(req, res) {
-  return res.send("Thread edit");
+async function show(req, res) {
+  const thread = await ThreadModel.findById(req.body.id);
+  thread == null ? res.send("Could not retrieve the thread you were after.") : res.send(thread);  
 }
 
 function update(req, res) {
@@ -31,7 +30,6 @@ function destroy(req, res) {
 module.exports = {
   index,
   show,
-  edit,
   update,
   make,
   create,
