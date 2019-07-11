@@ -11,8 +11,17 @@ async function show(req, res) {
   thread == null ? res.send("Could not retrieve the thread you were after.") : res.send(thread);  
 }
 
-function update(req, res) {
-  return res.send("Thread update");
+// REQUIREMENTS: id, changes(key value pairs)
+async function update(req, res) {
+  const {id, updatedThread} = req.body;
+  if(updatedThread) res.send("No data recieved, nothing has been updated.");
+  try {
+    const thread = await ThreadModel.update(id, updatedThread);
+    res.send("update successful");
+  } 
+  catch (erorr) {
+    res.send(error);
+  }
 }
 
 function make(req, res) {
