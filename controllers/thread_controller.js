@@ -13,30 +13,49 @@ async function show(req, res) {
 
 // REQUIREMENTS: id, changes(key value pairs)
 async function update(req, res) {
+  // Unpacking request
   const {id, updatedThread} = req.body;
-  if(updatedThread) res.send("No data recieved, nothing has been updated.");
+
+  // declares and sets default value for response
+  let response = "Default response for thread-update function: Something has gone wrong!";
+
+  // checks to see if updatedThread has a value.
+  if(updatedThread) response = "No data recieved, nothing has been updated.";
+
+  // Attempting to update thread
   try {
     const thread = await ThreadModel.update(id, updatedThread);
-    res.send("update successful");
+    response =  "update successful";
   } 
   catch (erorr) {
-    res.send(error);
+    response = "Error: While trying to thread-update a thread: " + error;
+    console.log(error);
   }
+
+  res.send(response);
 }
 
+// REQUIREMENTS: an object stored as 'newThread' within 'body'
 async function create(req, res) {
+  // unpacking required values from body.
   const {newThread} = req.body;
+
+  // declares and sets default value for response.
+  let response = "Default response for thread-create function: Something has gone wrong!";
+
+  // Checks to see if newThread has a value.
   if (newThread){
     try {
       const thread = await ThreadModel.insertOne(newThread);
-      res.send("Success!");
+      response = "Success! Thread created.";
     }
     catch (error) {
-      let response = "Error: while trying to create new thread: " + error;
+      response = "Error: While trying to create new thread: " + error;
       console.log(response);
-      res.send(response);
     }
-  }
+  } else response = "no value found for 'newThread'."
+
+  res.send(response);
 }
 
 function destroy(req, res) {
