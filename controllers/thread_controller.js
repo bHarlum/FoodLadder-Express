@@ -14,7 +14,8 @@ async function show(req, res) {
 // REQUIREMENTS: id, changes(key value pairs)
 async function update(req, res) {
   // Unpacking request
-  const {id, updatedThread} = req.body;
+  const {updatedThread} = req.body;
+  const {id: _id} = updatedThread; 
 
   // declares and sets default value for response
   let response = "Default response for thread-update function: Something has gone wrong!";
@@ -28,7 +29,7 @@ async function update(req, res) {
     response =  "update successful";
   } 
   catch (erorr) {
-    response = "Error: While trying to thread-update a thread: " + error;
+    response = customErrorMessage(error);
     console.log(error);
   }
 
@@ -50,7 +51,7 @@ async function create(req, res) {
       response = "Success! Thread created.";
     }
     catch (error) {
-      response = "Error: While trying to create new thread: " + error;
+      response = customErrorMessage(error);;
       console.log(response);
     }
   } else response = "no value found for 'newThread'."
@@ -58,8 +59,23 @@ async function create(req, res) {
   res.send(response);
 }
 
-function destroy(req, res) {
-  return res.send("Thread destroy");
+async function destroy(req, res) {
+  // unpacking body
+  const {id} = req.body;
+
+  let response = "Default response for thread-destroy function: Something has gone wrong!";
+  if(id){
+    try{
+      await ThreadModel.deleteOne(id);
+    }catch (error){
+      response = customErrorMessage(error);
+      console.log(response);
+    }
+  }
+}
+
+function customErrorMessage(error){
+  return `Error: While trying to ${customErrorMessage.caller} on thread: " + ${error}`
 }
 
 module.exports = {
