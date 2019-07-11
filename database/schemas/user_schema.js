@@ -32,7 +32,7 @@ const UserSchema = new Schema({
     required: true,
   },
 
-  notifactions: [NotificationSchema],
+  notifications: [NotificationSchema],
   
   createdAt: {
     type: Date,
