@@ -21,16 +21,17 @@ async function update(req, res) {
   let response = "Default response for thread-update function: Something has gone wrong!";
 
   // checks to see if updatedThread has a value.
-  if(updatedThread) response = "No data recieved, nothing has been updated.";
-
+  if(!updatedThread) {response = "No data recieved, nothing has been updated.";}
+  else {
   // Attempting to update thread
-  try {
-    const thread = await ThreadModel.update(id, updatedThread);
-    response =  "update successful";
-  } 
-  catch (erorr) {
-    response = customErrorMessage(error);
-    console.log(error);
+    try {
+      const thread = await ThreadModel.update(id, updatedThread);
+      response =  "update successful";
+    } 
+    catch (erorr) {
+      response = customErrorMessage(error);
+      console.log(error);
+    }
   }
 
   res.send(response);
