@@ -1,12 +1,12 @@
 const {Schema} = require("mongoose");
 
 const NotificationSchema = new Schema({
-  recipient: {
-    category: {
-      type: String,
-      // TODO: ADD MORE ENUM VALUES FOR NOTIFICATION
-      enum: ["message", "report"],
-    },
+  
+  category: {
+    type: String,
+    // TODO: ADD MORE ENUM VALUES FOR NOTIFICATION
+    enum: ["message", "report"],
+    required: true,
   },
   
   createdAt: {
