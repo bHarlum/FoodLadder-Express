@@ -24,8 +24,19 @@ async function update(req, res) {
   }
 }
 
-function create(req, res) {
-  return res.send("Thread create");
+async function create(req, res) {
+  const {newThread} = req.body;
+  if (newThread){
+    try {
+      const thread = await ThreadModel.insertOne(newThread);
+      res.send("Success!");
+    }
+    catch (error) {
+      let response = "Error: while trying to create new thread: " + error;
+      console.log(response);
+      res.send(response);
+    }
+  }
 }
 
 function destroy(req, res) {
