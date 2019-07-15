@@ -1,40 +1,70 @@
 const ProjectModel = require("./../database/models/project_model");
 
-// Returns all projects.
+// 
 async function index(req, res) {
+  let response = genericError();
   try{
     const projects = await ProjectModel.find();
-    projects.length == 0 ? res.send("Oh no, there doesn't seem to be any projects.") : res.send(projects);
-  } catch (err) {
-    console.log("Encountered an error while trying to get all projects " + err);
+    response = projects;
+  } catch (error) {
+    console.log(error);
+    response = genericError(error);
   }
+  res.send(response);
 }
 
-function show(req, res) {
-  return res.send("Projects show");
+// REQUIREMENTS: id for the project you want to retrieve
+// KEY: 'id'
+async function show(req, res) {
+  let response = genericError();
+  try{
+    const project = await ProjectModel.findOne(req.body.id);
+    response = project;
+  }catch (error){
+    console.log(error)
+    response = genericError(error);
+  }
+  res.send(response);
 }
 
-function edit(req, res) {
-  return res.send("Projects edit");
+// REQUIREMENTS: copy of updated object.
+// KEY: 'updatedProject'
+async function update(req, res) {
+  let response =  genericError();
+  const {updatedProject} =  req.body;
+  try {
+    const project = await ProjectModel.updateOne(updatedProject);
+    response = "Success! Project updated.";
+  }catch(error){
+    console.log(error);
+    response =  (error);
+  }
+  res.send(response);
 }
 
-function update(req, res) {
-  return res.send("Projects update");
+// REQUIREMENTS: A copy of the new Object.
+// KEY: 'newProject'
+async function create(req, res) {
+  let response = genericError();
+  try {
+    const project = await ProjectModel.create(newProject);
+    response = "Success! Project created.";
+  } catch (error){
+    response = genericError(error);
+    console.log(error);
+  }
+  res.send(resposne);
 }
 
-function make(req, res) {
-  return res.send("Projects make");
-}
-
-function create(req, res) {
-  return res.send("Projects create");
+function genericError(error){
+  return error ? 
+    `Error: While trying to ${customErrorMessage.caller} on Project-controller: " + ${error}` : 
+    `Error: Unhandled case. ${customErrorMessage.caller} on Project-controller.`;
 }
 
 module.exports = {
   index,
   show,
-  edit,
   update,
-  make,
   create
 }

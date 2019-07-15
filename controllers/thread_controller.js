@@ -64,7 +64,7 @@ async function create(req, res) {
   if (newThread){
     try {
       const thread = await ThreadModel.create(newThread);
-      response = "Success! Thread created.";
+      response = thread;
     }
     catch (error) {
       response = customErrorMessage(error);;
@@ -76,7 +76,7 @@ async function create(req, res) {
 }
 
 // REQUIREMENTS: the id of the record you want to delete
-// KEY: id
+// KEY: 'id'
 async function destroy(req, res) {
   // unpacking body
   const {id} = req.body;
