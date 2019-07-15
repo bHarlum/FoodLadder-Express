@@ -2,8 +2,12 @@ const ThreadModel = require("./../database/models/thread_model");
 
 async function index(req, res) {
   // get all threads
-  const threads = await ThreadModel.find();
-  threads.length == 0 ? res.send("Oh no! There doesn't seem to be any threads. ¯\\_(ツ)_/¯") : res.send(threads);
+  try {
+    const threads = await ThreadModel.find();
+    threads.length == 0 ? res.send("Oh no! There doesn't seem to be any threads. ¯\\_(ツ)_/¯") : res.send(threads);
+  } catch(err) {
+    console.log("Encountered an error while trying to get all threads " +  err);
+  }
 }
 
 async function show(req, res) {
@@ -14,8 +18,8 @@ async function show(req, res) {
 // REQUIREMENTS: id, changes(key value pairs)
 async function update(req, res) {
   // Unpacking request
+  console.log(req.body);
   const {updatedThread} = req.body;
-  const {id: _id} = updatedThread; 
 
   // declares and sets default value for response
   let response = "Default response for thread-update function: Something has gone wrong!";
@@ -25,15 +29,15 @@ async function update(req, res) {
   else {
   // Attempting to update thread
     try {
-      const thread = await ThreadModel.update(id, updatedThread);
+      const thread = await ThreadModel.update(updatedThread);
       response =  "update successful";
     } 
-    catch (erorr) {
+    catch (error) {
       response = customErrorMessage(error);
       console.log(error);
     }
   }
-
+  console.log("Running update function " + response);
   res.send(response);
 }
 
@@ -56,7 +60,7 @@ async function create(req, res) {
     }
   } else response = "no value found for 'newThread'."
 
-  console.log(response);
+  console.log("Thread create method running: " + response);
   res.send(response);
 }
 
