@@ -10,31 +10,50 @@ async function index(req, res) {
   }
 }
 
-function show(req, res) {
-  return res.send("Projects show");
+// REQUIREMENTS: id for the project you want to retrieve
+// KEY: 'id'
+async function show(req, res) {
+  let response = "Default response for project-show: Seems like we have encountered a new edgecase";
+  try {
+    const project = await ProjectModel.findOne(req.body.id);
+    response = project;
+  }catch(error){
+    response = "Error: Encountered an error in project-show: " + error;
+  }
+  res.send(response);
 }
 
-function edit(req, res) {
-  return res.send("Projects edit");
+// REQUIREMENTS: copy of updated object.
+// KEY: 'updatedProject'
+async function update(req, res) {
+  let response =  "Default response for project-update: A new edge case has been found."
+  const {updatedProject} =  req.body;
+  try {
+    const project = await ProjectModel.updateOne(updatedProject);
+    response = "Success! Project updated.";
+  }catch(error){
+    console.log(error);
+    response =  (error);
+  }
+  res.send(response);
 }
 
-function update(req, res) {
-  return res.send("Projects update");
-}
-
-function make(req, res) {
-  return res.send("Projects make");
-}
-
+// REQUIREMENTS: A copy of the new Object.
+// KEY: 'newProject'
 function create(req, res) {
-  return res.send("Projects create");
+  let response = genericError();
+
+}
+
+function genericError(error){
+  return error ? 
+    `Error: While trying to ${customErrorMessage.caller} on Project-controller: " + ${error}` : 
+    `Error: unhandled case. ${customErrorMessage.caller} on Project-controller.`;
 }
 
 module.exports = {
   index,
   show,
-  edit,
   update,
-  make,
   create
 }
