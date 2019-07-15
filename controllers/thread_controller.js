@@ -10,8 +10,11 @@ async function index(req, res) {
   }
 }
 
+//updateOne({ _id: doc._id }, { $set: { name: 'foo' } })
+// const thread = await ThreadModel.updateOne({_id: req.body.id}, {$inc: {views: 1}});
+
 async function show(req, res) {
-  const thread = await ThreadModel.findById(req.body.id);
+  const thread = await ThreadModel.findOne(req.body.id);
   thread == null ? res.send("Could not retrieve the thread you were after.") : res.send(thread);  
 }
 
