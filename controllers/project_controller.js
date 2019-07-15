@@ -4,7 +4,7 @@ const ProjectModel = require("./../database/models/project_model");
 async function index(req, res) {
   try{
     const projects = await ProjectModel.find();
-    projects.length == 0 ? res.send("Oh no, there doesn't seem to be any posts.") : res.send(projects);
+    projects.length == 0 ? res.send("Oh no, there doesn't seem to be any projects.") : res.send(projects);
   } catch (err) {
     console.log("Encountered an error while trying to get all projects " + err);
   }
