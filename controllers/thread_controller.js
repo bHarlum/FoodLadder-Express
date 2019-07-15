@@ -10,11 +10,12 @@ async function index(req, res) {
   }
 }
 
-
+// REQUIREMENTS: id of desired object
+// KEY: 'id'
 async function show(req, res) {
-  //updateOne({ _id: doc._id }, { $set: { name: 'foo' } })
   let response  = "Default response for thread-show function. Something has gone wrong";
   try {
+  // Using findOneAndUpdate over findOne to update the view count on each request.
   const thread = await ThreadModel.findOneAndUpdate(req.body.id, {$inc: {views: 1}}, {new: true});
   response = thread;
   } catch (error) {
@@ -23,7 +24,8 @@ async function show(req, res) {
   res.send(response);  
 }
 
-// REQUIREMENTS: id, changes(key value pairs)
+// REQUIREMENTS: Copy of updated object
+// KEY: 'updatedThread'
 async function update(req, res) {
   // Unpacking request
   console.log(req.body);
@@ -49,7 +51,8 @@ async function update(req, res) {
   res.send(response);
 }
 
-// REQUIREMENTS: an object stored as 'newThread' within 'body'
+// REQUIREMENTS: A copy of the new Object
+// KEY: 'newThread'
 async function create(req, res) {
   // unpacking required values from body.
   const {newThread} = req.body;
@@ -72,6 +75,8 @@ async function create(req, res) {
   res.send(response);
 }
 
+// REQUIREMENTS: the id of the record you want to delete
+// KEY: id
 async function destroy(req, res) {
   // unpacking body
   const {id} = req.body;
