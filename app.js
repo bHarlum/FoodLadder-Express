@@ -1,6 +1,11 @@
 const express = require("express");
 const morgan = require("morgan");
 const app = express();
+const cors = require("cors");
+
+app.use(cors({
+  origin: "http://localhost:3000"
+}));
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
