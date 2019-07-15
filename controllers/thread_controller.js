@@ -2,20 +2,34 @@ const ThreadModel = require("./../database/models/thread_model");
 
 async function index(req, res) {
   // get all threads
-  const threads = await ThreadModel.find();
-  threads.length == 0 ? res.send("Oh no! There doesn't seem to be any threads. ¯\\_(ツ)_/¯") : res.send(threads);
+  try {
+    const threads = await ThreadModel.find();
+    threads.length == 0 ? res.send("Oh no! There doesn't seem to be any threads. ¯\\_(ツ)_/¯") : res.send(threads);
+  } catch(err) {
+    console.log("Encountered an error while trying to get all threads " +  err);
+  }
 }
 
+// REQUIREMENTS: id of desired object
+// KEY: 'id'
 async function show(req, res) {
-  const thread = await ThreadModel.findById(req.body.id);
-  thread == null ? res.send("Could not retrieve the thread you were after.") : res.send(thread);  
+  let response  = "Default response for thread-show function. Something has gone wrong";
+  try {
+  // Using findOneAndUpdate over findOne to update the view count on each request.
+  const thread = await ThreadModel.findOneAndUpdate(req.body.id, {$inc: {views: 1}}, {new: true});
+  response = thread;
+  } catch (error) {
+    response = "Error: Ran into an error while trying to get/update a thread. " + error;
+  }
+  res.send(response);  
 }
 
-// REQUIREMENTS: id, changes(key value pairs)
+// REQUIREMENTS: Copy of updated object
+// KEY: 'updatedThread'
 async function update(req, res) {
   // Unpacking request
+  console.log(req.body);
   const {updatedThread} = req.body;
-  const {id: _id} = updatedThread; 
 
   // declares and sets default value for response
   let response = "Default response for thread-update function: Something has gone wrong!";
@@ -25,19 +39,20 @@ async function update(req, res) {
   else {
   // Attempting to update thread
     try {
-      const thread = await ThreadModel.update(id, updatedThread);
+      const thread = await ThreadModel.update(updatedThread);
       response =  "update successful";
     } 
-    catch (erorr) {
+    catch (error) {
       response = customErrorMessage(error);
       console.log(error);
     }
   }
-
+  console.log("Running update function " + response);
   res.send(response);
 }
 
-// REQUIREMENTS: an object stored as 'newThread' within 'body'
+// REQUIREMENTS: A copy of the new Object
+// KEY: 'newThread'
 async function create(req, res) {
   // unpacking required values from body.
   const {newThread} = req.body;
@@ -49,17 +64,19 @@ async function create(req, res) {
   if (newThread){
     try {
       const thread = await ThreadModel.create(newThread);
-      response = "Success! Thread created.";
+      response = thread;
     }
     catch (error) {
       response = customErrorMessage(error);;
     }
   } else response = "no value found for 'newThread'."
 
-  console.log(response);
+  console.log("Thread create method running: " + response);
   res.send(response);
 }
 
+// REQUIREMENTS: the id of the record you want to delete
+// KEY: 'id'
 async function destroy(req, res) {
   // unpacking body
   const {id} = req.body;
