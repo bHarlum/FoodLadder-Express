@@ -1,24 +1,28 @@
 const ProjectModel = require("./../database/models/project_model");
 
-// Returns all projects.
+// 
 async function index(req, res) {
+  let response = genericError();
   try{
     const projects = await ProjectModel.find();
-    projects.length == 0 ? res.send("Oh no, there doesn't seem to be any projects.") : res.send(projects);
-  } catch (err) {
-    console.log("Encountered an error while trying to get all projects " + err);
+    response = projects;
+  } catch (error) {
+    console.log(error);
+    response = genericError(error);
   }
+  res.send(response);
 }
 
 // REQUIREMENTS: id for the project you want to retrieve
 // KEY: 'id'
 async function show(req, res) {
-  let response = "Default response for project-show: Seems like we have encountered a new edgecase";
-  try {
+  let response = genericError();
+  try{
     const project = await ProjectModel.findOne(req.body.id);
     response = project;
-  }catch(error){
-    response = "Error: Encountered an error in project-show: " + error;
+  }catch (error){
+    console.log(error)
+    response = genericError(error);
   }
   res.send(response);
 }
@@ -26,7 +30,7 @@ async function show(req, res) {
 // REQUIREMENTS: copy of updated object.
 // KEY: 'updatedProject'
 async function update(req, res) {
-  let response =  "Default response for project-update: A new edge case has been found."
+  let response =  genericError();
   const {updatedProject} =  req.body;
   try {
     const project = await ProjectModel.updateOne(updatedProject);
@@ -40,15 +44,22 @@ async function update(req, res) {
 
 // REQUIREMENTS: A copy of the new Object.
 // KEY: 'newProject'
-function create(req, res) {
+async function create(req, res) {
   let response = genericError();
-
+  try {
+    const project = await ProjectModel.create(newProject);
+    response = "Success! Project created.";
+  } catch (error){
+    response = genericError(error);
+    console.log(error);
+  }
+  res.send(resposne);
 }
 
 function genericError(error){
   return error ? 
     `Error: While trying to ${customErrorMessage.caller} on Project-controller: " + ${error}` : 
-    `Error: unhandled case. ${customErrorMessage.caller} on Project-controller.`;
+    `Error: Unhandled case. ${customErrorMessage.caller} on Project-controller.`;
 }
 
 module.exports = {
