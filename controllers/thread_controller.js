@@ -10,12 +10,17 @@ async function index(req, res) {
   }
 }
 
-//updateOne({ _id: doc._id }, { $set: { name: 'foo' } })
-// const thread = await ThreadModel.updateOne({_id: req.body.id}, {$inc: {views: 1}});
 
 async function show(req, res) {
-  const thread = await ThreadModel.findOne(req.body.id);
-  thread == null ? res.send("Could not retrieve the thread you were after.") : res.send(thread);  
+  //updateOne({ _id: doc._id }, { $set: { name: 'foo' } })
+  let response  = "Default response for thread-show function. Something has gone wrong";
+  try {
+  const thread = await ThreadModel.findOneAndUpdate(req.body.id, {$inc: {views: 1}}, {new: true});
+  response = thread;
+  } catch (error) {
+    response = "Error: Ran into an error while trying to get/update a thread. " + error;
+  }
+  res.send(response);  
 }
 
 // REQUIREMENTS: id, changes(key value pairs)
