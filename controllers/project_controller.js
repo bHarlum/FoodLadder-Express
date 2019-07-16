@@ -54,7 +54,7 @@ async function create(req, res) {
     response = genericError(error);
     console.log(error);
   }
-  res.send(resposne);
+  res.send(response);
 }
 
 function genericError(error){
