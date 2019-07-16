@@ -58,8 +58,8 @@ async function create(req, res) {
 
 function genericError(error){
   return error ? 
-    `Error: While trying to ${customErrorMessage.caller} on Project-controller: " + ${error}` : 
-    `Error: Unhandled case. ${customErrorMessage.caller} on Project-controller.`;
+    `Error: While trying to ${genericError.caller} on Project-controller: " + ${error}` : 
+    `Error: Unhandled case. ${genericError.caller} on Project-controller.`;
 }
 
 module.exports = {

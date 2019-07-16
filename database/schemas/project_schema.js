@@ -51,7 +51,12 @@ const ProjectSchema = new Schema({
       lowercase: true,
     },
 
-    suburb: {
+    postCode: {
+      type: String,
+      lowercase: true,
+    },
+
+    city: {
       type: String,
       required: true,
       lowercase: true,
