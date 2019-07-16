@@ -46,6 +46,7 @@ async function update(req, res) {
 // KEY: 'newProject'
 async function create(req, res) {
   let response = genericError();
+  const {newProject} = req.body;
   try {
     const project = await ProjectModel.create(newProject);
     response = "Success! Project created.";
