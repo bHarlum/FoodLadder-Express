@@ -45,7 +45,7 @@ async function login(req, res, next) {
 
 function logout(req, res) {
   req.logout();
-  res.redirect('/');
+  res.send("logged out?");
 }
 
 module.exports = {
