@@ -1,4 +1,5 @@
 const ProjectModel = require("./../database/models/project_model");
+const generator = require("./../mailer/generator");
 
 // 
 async function index(req, res) {
@@ -47,8 +48,10 @@ async function update(req, res) {
 async function create(req, res) {
   let response = genericError();
   const {newProject} = req.body;
+  console.log(newProject);
   try {
     const project = await ProjectModel.create(newProject);
+    await generator({email: newProject.users.email,name: newProject.users.name});
     response = "Success! Project created.";
   } catch (error){
     response = genericError(error);
