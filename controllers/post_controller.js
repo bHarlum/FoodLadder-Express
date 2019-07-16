@@ -1,38 +1,25 @@
 const ThreadModel = require("./../database/models/thread_model");
 
-function index(req, res) {
 
-}
+async function update(req, res) {
+  const updatedThread = req.body;
+  const {id: _id} = updatedThread; 
 
-function show(req, res) {
+  let response = "Default response for post-update function: Something has gone wrong.";
 
-}
-
-function edit(req, res) {
-
-}
-
-function update(req, res) {
-
-}
-
-function make(req, res) {
-
-}
-
-function create(req, res) {
-
-}
-
-function destroy(req, res) {
-
+  if(!updatedThread){
+    response = "No data recieved, Nothing has been updated."
+  } else {
+    try {
+      const thread = await ThreadModel.update(id, updatedThread);
+    } catch (err){
+      console.log(err);
+      response = err;
+    }
+  }
+  res.send(response);
 }
 
 module.exports = {
-  index,
-  show,
-  edit,
-  update,
-  make,
-  destroy
+  update
 } 
