@@ -8,7 +8,8 @@ function index(req, res) {
 }
 
 function show(req, res) {
-  return res.send('User show');
+  const { user } = req;
+  return res.send(user);
 }
 
 function update(req, res) {
@@ -31,16 +32,27 @@ function register(req, res, next) {
 }
 
 // Login existing user and generate token
-async function login(req, res, next) {
-  const { email, password } = req.body;
-  try {
-    const { user, error } = await UserModel.authenticate()(email, password);
-    if (error) throw error;
-    const token = JWTService.generateToken(user._id);
-    res.json(token);
-  } catch(err) {
-    return next(err);
-  }
+// async function login(req, res, next) {
+
+//   console.log(req);
+//   const { user } = req;
+//   res(user);
+//   // const { email, password } = req.body;
+//   // try {
+//   //   const { user, error } = await UserModel.authenticate()(email, password);
+//   //   if (error) throw error;
+//   //   const token = JWTService.generateToken(user._id);
+//   //   res.json(token);
+//   // } catch(err) {
+//   //   return next(err);
+//   // }
+// }
+
+function login(req, res) {  
+  console.log("running login function");
+  const { user } = req;
+  const token = JWTService.generateToken(user);
+  return res.json(token);
 }
 
 function logout(req, res) {

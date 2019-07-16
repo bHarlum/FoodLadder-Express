@@ -1,9 +1,29 @@
 const passport = require("passport");
 const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
+const LocalStrategy = require("passport-local");
 const UserModel = require("./../database/models/user_model");
 
 passport.serializeUser(UserModel.serializeUser());
 passport.deserializeUser(UserModel.deserializeUser());
+
+passport.use(new LocalStrategy({
+    usernameField: 'email'  
+  },
+  async (email, password, done) => {
+    try {
+      console.log("running local strategy");
+      const { user } = await UserModel.authenticate()(email, password);
+      console.log(`user = ${user}`);
+      if (user) {
+          return done(null, user);
+      }
+      return done(null, false);
+    } catch (error) {
+      done(error);
+    }
+    
+  }
+));
 
 passport.use(new JwtStrategy({
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
