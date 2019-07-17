@@ -32,7 +32,6 @@ async function show(req, res) {
 // KEY: 'updatedThread'
 async function update(req, res) {
   // Unpacking request
-  console.log(req.body);
   const {updatedThread} = req.body;
 
   // declares and sets default value for response
@@ -43,8 +42,8 @@ async function update(req, res) {
   else {
   // Attempting to update thread
     try {
-      const thread = await ThreadModel.update(updatedThread);
-      response =  "update successful";
+      const thread = await ThreadModel.findOneAndUpdate({ _id: req.params.id }, updatedThread, { new: true });
+      response = thread;
     } 
     catch (error) {
       response = customErrorMessage(error);
