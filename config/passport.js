@@ -1,38 +1,47 @@
-const LocalStrategy = require('passport-local').Strategy;
-const UserModel = require('./../database/models/user_model');
-const bcrypt = require('bcryptjs');
+const passport = require("passport");
+const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
+const LocalStrategy = require("passport-local");
+const UserModel = require("./../database/models/user_model");
 
-module.exports = function(passport) {
-  // Local Strategy
-  passport.use(
-    new LocalStrategy(function(email, password, done) {
-      // Match Username
-      UserModel.findOne(email, function(err, user) {
-        if (err) throw err;
-        if (!user) {
-          return done(null, false, { message: 'No user found' });
-        }
+passport.serializeUser(UserModel.serializeUser());
+passport.deserializeUser(UserModel.deserializeUser());
 
-        // Match Password
-        bcrypt.compare(password, user.password, function(err, isMatch) {
-          if (err) throw err;
-          if (isMatch) {
-            return done(null, user);
-          } else {
-            return done(null, false, { message: 'Wrong password' });
-          }
-        });
-      });
-    })
-  );
+passport.use(new LocalStrategy({
+    usernameField: 'email'  
+  },
+  async (email, password, done) => {
+    try {
+      console.log("running local strategy");
+      const { user } = await UserModel.authenticate()(email, password);
+      console.log(`user = ${user}`);
+      if (user) {
+          return done(null, user);
+      }
+      return done(null, false, { message: 'Incorrect password.' });
+    } catch (error) {
+      done(error);
+    }
+    
+  }
+));
 
-  passport.serializeUser(function(user, done) {
-    done(null, user.id);
-  });
+passport.use(new JwtStrategy({
+  jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+  secretOrKey: process.env.JWT_SECRET
+},
+async (jwt_payload, done) => {
+  try {
+    const user = await UserModel.findById(jwt_payload.sub);
 
-  passport.deserializeUser(function(id, done) {
-    User.findById(id, function(err, user) {
-      done(err, user);
-    });
-  });
-};
+    if (!user) {
+        return done(null, false);
+    }
+    
+    return done(null, user);           
+  } catch (error) {
+      return done(error);
+  }
+}
+));
+
+module.exports = passport;
