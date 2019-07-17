@@ -5,7 +5,7 @@ const passport = require("passport");
 const UserController = require('../controllers/user_controller.js');
 
 router.get('/', UserController.index);
-router.get('/:id', UserController.show);
+router.get('/:id', passport.authenticate("jwt", { session: false }), UserController.show);
 
 router.put('/:id/update', UserController.update);
 router.patch('/:id/update', UserController.update);

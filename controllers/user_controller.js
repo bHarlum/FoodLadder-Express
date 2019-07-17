@@ -9,7 +9,8 @@ function index(req, res) {
 
 function show(req, res) {
   const { user } = req;
-  return res.send(user);
+  const { _id: id, firstName, lastName, admin } = user;
+  return res.send({ id, firstName, lastName, admin});
 }
 
 function update(req, res) {
@@ -27,32 +28,23 @@ function register(req, res, next) {
     console.log(user);
 
 		const token = JWTService.generateToken(user._id);
-		return res.json({ token });
+		return res.json({ 
+      token,
+      id: user._id,
+      firstName: user.firstName
+    });
 	});
 }
-
-// Login existing user and generate token
-// async function login(req, res, next) {
-
-//   console.log(req);
-//   const { user } = req;
-//   res(user);
-//   // const { email, password } = req.body;
-//   // try {
-//   //   const { user, error } = await UserModel.authenticate()(email, password);
-//   //   if (error) throw error;
-//   //   const token = JWTService.generateToken(user._id);
-//   //   res.json(token);
-//   // } catch(err) {
-//   //   return next(err);
-//   // }
-// }
 
 function login(req, res) {  
   console.log("running login function");
   const { user } = req;
   const token = JWTService.generateToken(user);
-  return res.json(token);
+  return res.json({ 
+    token,
+    id: user._id,
+    firstName: user.firstName
+  });
 }
 
 function logout(req, res) {

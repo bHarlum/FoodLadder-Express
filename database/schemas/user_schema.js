@@ -20,6 +20,11 @@ const UserSchema = new Schema({
     lowercase: true
   },
 
+  admin: {
+    type: Boolean,
+    default: false
+  },
+
   notifications: [NotificationSchema],
 
   createdAt: {

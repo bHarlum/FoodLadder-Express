@@ -30,7 +30,9 @@ passport.use(new JwtStrategy({
   secretOrKey: process.env.JWT_SECRET
 },
 async (jwt_payload, done) => {
+  console.log("Jwt Strategy working?");
   try {
+    console.log(jwt_payload);
     const user = await UserModel.findById(jwt_payload.sub);
 
     if (!user) {
