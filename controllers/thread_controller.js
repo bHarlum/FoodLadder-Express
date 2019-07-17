@@ -14,13 +14,17 @@ async function index(req, res) {
 // KEY: 'id'
 async function show(req, res) {
   let response  = "Default response for thread-show function. Something has gone wrong";
+  const { id } = req.params;
+  console.log(id);
   try {
-  // Using findOneAndUpdate over findOne to update the view count on each request.
-  const thread = await ThreadModel.findOneAndUpdate(req.body.id, {$inc: {views: 1}}, {new: true});
-  response = thread;
+    // Using findOneAndUpdate over findOne to update the view count on each request.
+    const thread = await ThreadModel.findOneAndUpdate( { _id: id }, {$inc: {views: 1}}, {new: true});
+    response = thread;
+    console.log(thread);
+
   } catch (error) {
-    response = "Error: Ran into an error while trying to get/update a thread. " + error;
-  }
+      response = "Error: Ran into an error while trying to get/update a thread. " + error;
+    }
   res.send(response);  
 }
 
