@@ -4,7 +4,8 @@ require('dotenv').config();
 const fs = require("fs");
 
 // REQUIREMENTS: Object: target = {name: String, email: String}
-function mailer(target){
+function mailer(target, email){
+  console.log(target);
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -17,7 +18,7 @@ function mailer(target){
     from: process.env.MAIL_ADDRESS,
     to: target.email,
     subject: 'Invitation to join Food Ladder online support.',
-    html: fs.readFileSync("./mail.html", { encoding: "utf8"})
+    html: email
   };
 
   transporter.sendMail(mailOptions, function(error, info){
