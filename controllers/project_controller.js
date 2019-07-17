@@ -1,4 +1,5 @@
 const ProjectModel = require("./../database/models/project_model");
+const generator = require("./../mailer/generator");
 
 // 
 async function index(req, res) {
@@ -46,20 +47,23 @@ async function update(req, res) {
 // KEY: 'newProject'
 async function create(req, res) {
   let response = genericError();
+  const {newProject} = req.body;
+  console.log(newProject);
   try {
     const project = await ProjectModel.create(newProject);
+    await generator({email: newProject.users.email,name: newProject.users.name});
     response = "Success! Project created.";
   } catch (error){
     response = genericError(error);
     console.log(error);
   }
-  res.send(resposne);
+  res.send(response);
 }
 
 function genericError(error){
   return error ? 
-    `Error: While trying to ${customErrorMessage.caller} on Project-controller: " + ${error}` : 
-    `Error: Unhandled case. ${customErrorMessage.caller} on Project-controller.`;
+    `Error: While trying to ${genericError.caller} on Project-controller: " + ${error}` : 
+    `Error: Unhandled case. ${genericError.caller} on Project-controller.`;
 }
 
 module.exports = {
