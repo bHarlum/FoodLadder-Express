@@ -4,7 +4,7 @@ async function index(req, res) {
   // get all threads
   try {
     const threads = await ThreadModel.find();
-    threads.length == 0 ? res.send("Oh no! There doesn't seem to be any threads. ¯\\_(ツ)_/¯") : res.send(threads);
+    threads.length == 0 ? res.send(null) : res.send(threads);
   } catch(err) {
     console.log("Encountered an error while trying to get all threads " +  err);
   }
