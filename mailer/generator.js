@@ -36,13 +36,8 @@ function generator(target) {
   // Generate an HTML email with the provided contents
   var emailBody = mailGenerator.generate(email);
 
-  // Generate the plaintext version of the e-mail (for clients that do not support HTML)
-  // var emailText = mailGenerator.generatePlaintext(email);
-  
-  // Optionally, preview the generated HTML e-mail by writing it to a local file
-  require('fs').writeFileSync('mail.html', emailBody, 'utf8');
   console.log("mail file generated.");
-  mailer(target);
+  mailer(target, emailBody);
 }
 
 module.exports = generator;
