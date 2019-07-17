@@ -5,7 +5,7 @@ const fs = require("fs");
 
 // REQUIREMENTS: Object: target = {name: String, email: String}
 function mailer(target, email){
-
+  console.log(target);
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
