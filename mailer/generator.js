@@ -26,7 +26,7 @@ function generator(target) {
             button: {
                 color: '#22BC66', // Optional action button color
                 text: 'Confirm your account',
-                link: 'http://localhost:3000'
+                link: `http://localhost:3000?unique=${target.code}`
             }
         },
         outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.'
