@@ -25,6 +25,14 @@ const UserSchema = new Schema({
     default: false
   },
 
+  projects: [{
+    projectId: {
+      // TODO: could be of Type ObjectId #####
+      type: String,
+      default: null,
+    }
+  }],
+
   notifications: [NotificationSchema],
 
   createdAt: {

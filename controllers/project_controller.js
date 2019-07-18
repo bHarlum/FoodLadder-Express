@@ -20,11 +20,11 @@ async function index(req, res) {
 async function show(req, res) {
   let response = genericError();
   try{
-    const project = await ProjectModel.findOne(req.body.id);
+    const project = await ProjectModel.findOne({ _id: req.params.id});
     response = project;
   }catch (error){
-    console.log(error)
-    response = genericError(error);
+    console.log(error.message);
+    response = null;
   }
   res.send(response);
 }
