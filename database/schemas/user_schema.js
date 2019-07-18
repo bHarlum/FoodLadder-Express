@@ -43,7 +43,7 @@ const UserSchema = new Schema({
 
 UserSchema.plugin(passportLocalMongoose, { 
   usernameField: 'email', 
-  selectFields: 'firstName lastName phone notifications createdAt' 
+  selectFields: 'firstName lastName phone notifications projects createdAt' 
 });
 
 module.exports = UserSchema;

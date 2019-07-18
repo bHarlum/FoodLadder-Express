@@ -19,6 +19,7 @@ async function find(req, res) {
 
 async function addProject(req, res) {
   const { user } = req;
+  console.log(user);
   const { projectId } = req.body;
 
   const newUser = UserModel.findByIdAndUpdate(
@@ -37,27 +38,41 @@ function update(req, res) {
   return res.send("empty update function");
 }
 
-function register(req, res, next) {
+async function register(req, res, next) {
 	const { firstName, lastName, phone, email, password, projectId } = req.body;
 
-	UserModel.register({ firstName, lastName, phone, email }, password, function(err, user) {
+	const user = await UserModel.register({ firstName, lastName, phone, email }, password, function(err, user) {
 		if (err) {
-			return next(err);
+			console.log(err);
     }
 
+    console.log("---------------------\nUSER =")
     console.log(user);
 
-		const token = JWTService.generateToken(user._id);
-		return res.json({ 
+    const newUser = UserModel.findByIdAndUpdate(
+      user._id,
+      {$push: {projects: {projectId}}},
+      {safe: true, upsert: true},
+      function(err, model) {
+          console.log(err);
+      }
+    )
+    
+    console.log("---------------------\nNEW USER =")
+    console.log(newUser);
+
+    const token = JWTService.generateToken(user._id);
+
+    return res.json({ 
       token,
       id: user._id,
       firstName: user.firstName
     });
-	});
+  });
+
 }
 
 function login(req, res) {  
-  console.log("running login function");
   const { user } = req;
   const token = JWTService.generateToken(user);
   return res.json({ 
