@@ -1,6 +1,5 @@
 const ProjectModel = require("./../database/models/project_model");
 const generator = require("./../mailer/generator");
-const randomize = require("randomatic");
 
 // 
 async function index(req, res) {
@@ -50,13 +49,13 @@ async function create(req, res) {
   let response = genericError();
   const {newProject} = req.body;
 
-  newProject.uniqueCode.value = randomize('aA0', 10);
+
   try {
     const project = await ProjectModel.create(newProject)
       await generator({
       email: project.users[0].email, 
       name: newProject.userName, 
-      code: project.uniqueCode.value});
+      code: project._id});
       response = "Success! Project created.";
   } 
   catch (error){

@@ -1,5 +1,6 @@
 const Mailgen = require('mailgen');
 const mailer = require("./mailer");
+require("dotenv");
 
  
 // REQUIREMENTS: Object: target = {name: String, email: String}
@@ -22,14 +23,14 @@ function generator(target) {
         name: `${target.name}`,
         intro: 'Welcome to Food Ladder! We\'re very excited to have you on board.',
         action: {
-            instructions: 'To get started with Food Ladder, please click here:',
+            instructions: 'To get started with Food Ladder, please click the button below.',       
             button: {
                 color: '#22BC66', // Optional action button color
                 text: 'Confirm your account',
-                link: `http://localhost:3000?unique=${target.code}`
+                link: `http://localhost:3000/register/${target.code}`
             }
         },
-        outro: 'Need help, or have questions? Just reply to this email, we\'d love to help.'
+        outro: `Button not working? Visit: http://localhost:3000 and enter the code ${target.code}`
     }
   };
 
