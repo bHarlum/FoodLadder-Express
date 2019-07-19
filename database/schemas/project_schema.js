@@ -1,8 +1,10 @@
 const {Schema} = require("mongoose");
+
 const NotificationSchema = require("./notification_schema");
+const ReportSchema = require("./report_schema");
+const FileSchema =  require("./file_schema");
 
-
-const projectSchema = new Schema({
+const ProjectSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -31,11 +33,11 @@ const projectSchema = new Schema({
       required: true,
     },
 
-    userId: {
-      // TODO: could be of Type ObjectId #####
-      type: String,
-      default: null,
+    activated: {
+      type: Boolean,
+      default: false
     }
+
   }],
 
   address: {
@@ -50,7 +52,12 @@ const projectSchema = new Schema({
       lowercase: true,
     },
 
-    suburb: {
+    postCode: {
+      type: String,
+      lowercase: true,
+    },
+
+    city: {
       type: String,
       required: true,
       lowercase: true,
@@ -78,6 +85,18 @@ const projectSchema = new Schema({
   reports: [ReportSchema],
 
   notifications: [NotificationSchema],
+
+  filePerm: {
+    maxUsage: {
+      type: Number
+    },
+    currentUsage: {
+      type: Number,
+      default: 0
+    }
+  },
+
+  files: [FileSchema],
 
   createdAt: {
     type: Date,
