@@ -1,6 +1,7 @@
 const { Schema } = require('mongoose');
 const NotificationSchema = require('./notification_schema');
 const passportLocalMongoose = require('passport-local-mongoose');
+const FileSchema =  require("./file_schema");
 
 const UserSchema = new Schema({
   firstName: {
@@ -24,6 +25,18 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false
   },
+
+  filePerm: {
+    maxUsage: {
+      type: Number
+    },
+    currentUsage: {
+      type: Number,
+      default: 0
+    }
+  },
+
+  files: [FileSchema],
 
   notifications: [NotificationSchema],
 
