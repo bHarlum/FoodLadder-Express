@@ -49,7 +49,7 @@ async function register(req, res, next) {
           console.log(err);
       }
     )
-    
+
     const token = JWTService.generateToken(user._id);
 
     return res.json({ 
@@ -60,7 +60,7 @@ async function register(req, res, next) {
   });
 }
 
-function login(req, res) {  
+async function login(req, res) {  
   const { user } = req;
   const { projectId } = req.body;
   const token = JWTService.generateToken(user);
@@ -68,7 +68,7 @@ function login(req, res) {
   console.log(projectId);
   if(projectId){
     console.log("adding project to user");
-    UserModel.findByIdAndUpdate(
+    await UserModel.findByIdAndUpdate(
       user._id,
       {$push: {projects: {projectId}}},
       {safe: true, upsert: true},
