@@ -92,8 +92,8 @@ function logout(req, res) {
 
 async function uploadFile(req, res) {
   const { id } = req.body;
-  const user = await UserModel.findOneAndUpdate({_id: id},{profilePicture});
-  res.send(user);
+  const user = await UserModel.findOneAndUpdate({_id: id},{profilePicture: req.file.location});
+  res.send("Success!");
 }
 
 module.exports = {

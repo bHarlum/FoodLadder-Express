@@ -34,7 +34,9 @@ const UserSchema = new Schema({
     }
   }],
 
-  profilePicture: {FileSchema},
+  profilePicture: {
+    type: String,
+  },
 
   notifications: [NotificationSchema],
 
