@@ -6,7 +6,8 @@ const passport = require("./config/passport");
 const session = require('express-session');
 
 app.use(cors({
-  origin: "http://localhost:3000"
+  origin: ["http://localhost:3000", "http://food-ladder-bucket.s3-website-ap-southeast-2.amazonaws.com/"]
+
 }));
 
 app.use(express.urlencoded({ extended: false }));
