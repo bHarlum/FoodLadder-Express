@@ -32,11 +32,11 @@ const ProjectSchema = new Schema({
       required: true,
     },
 
-    userId: {
-      // TODO: could be of Type ObjectId #####
-      type: String,
-      default: null,
+    activated: {
+      type: Boolean,
+      default: false
     }
+
   }],
 
   address: {

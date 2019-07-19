@@ -1,8 +1,12 @@
 const UserModel = require('./../database/models/user_model');
 const JWTService = require("./../services/jwt_service");
 
-function index(req, res) {
-  return res.send('I will get all users');
+async function index(req, res) {
+  const users = await UserModel.find();
+  const emails = users.map(user => {
+    return user.email;
+  });
+  return res.send(emails);
 }
 
 function show(req, res) {
@@ -13,25 +17,17 @@ function show(req, res) {
 
 async function find(req, res) {
   const { userEmail } = req.params;
-  const user = await UserModel.findOne({ email: userEmail });
-  return res.send(user);
-}
-
-async function addProject(req, res) {
-  const { user } = req;
-  console.log(user);
-  const { projectId } = req.body;
-
-  const newUser = UserModel.findByIdAndUpdate(
-    user._id,
-    {$push: {projects: projectId}},
-    {safe: true, upsert: true},
-    function(err, model) {
-        console.log(err);
+  console.log("Getting user by email\n-----------------------------\n")
+  const user = await UserModel.findOne({ email: userEmail }, function(err, obj) {
+    if(err){
+      return null;
     }
-  )
 
-  return res.json({newUser});
+    return obj;
+  });
+  console.log("-----------------------------\nUser=")
+  console.log(user);
+  return user ? res.send(user) : res.send(null);
 }
 
 function update(req, res) {
@@ -41,14 +37,10 @@ function update(req, res) {
 async function register(req, res, next) {
 	const { firstName, lastName, phone, email, password, projectId } = req.body;
 
-	const user = await UserModel.register({ firstName, lastName, phone, email }, password, function(err, user) {
+	UserModel.register({ firstName, lastName, phone, email }, password, function(err, user) {
 		if (err) {
 			console.log(err);
     }
-
-    console.log("---------------------\nUSER =")
-    console.log(user);
-
     const newUser = UserModel.findByIdAndUpdate(
       user._id,
       {$push: {projects: {projectId}}},
@@ -58,9 +50,6 @@ async function register(req, res, next) {
       }
     )
     
-    console.log("---------------------\nNEW USER =")
-    console.log(newUser);
-
     const token = JWTService.generateToken(user._id);
 
     return res.json({ 
@@ -69,12 +58,26 @@ async function register(req, res, next) {
       firstName: user.firstName
     });
   });
-
 }
 
 function login(req, res) {  
   const { user } = req;
+  const { projectId } = req.body;
   const token = JWTService.generateToken(user);
+  
+  console.log(projectId);
+  if(projectId){
+    console.log("adding project to user");
+    UserModel.findByIdAndUpdate(
+      user._id,
+      {$push: {projects: {projectId}}},
+      {safe: true, upsert: true},
+      function(err, model) {
+          console.log(err);
+      }
+    )
+  }
+
   return res.json({ 
     token,
     id: user._id,
@@ -92,7 +95,7 @@ module.exports = {
   show,
   find,
   update,
-  addProject,
+  // addProject,
   register,
   login,
   logout
