@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const passport = require("passport");
+const upload = require("./../services/resource_bucket/upload_manager");
 
 const ProjectController = require("./../controllers/project_controller");
 
@@ -12,5 +13,7 @@ router.put("/:id/update", ProjectController.update);
 router.patch("/:id/update", ProjectController.update);
 
 router.post("/", ProjectController.create);
+
+router.post('/upload', upload, ProjectController.uploadFile);
 
 module.exports = router;

@@ -53,6 +53,7 @@ async function create(req, res) {
     const project = await ProjectModel.create(newProject)
       await generator({
       email: project.users[0].email, 
+      projectName: project.name,
       name: newProject.userName, 
       code: project._id});
       response = "Success! Project created.";
@@ -76,6 +77,21 @@ function findCurrent(req, res) {
   });
 }
 
+function uploadFile(req, res) {
+  const { id } = req.body;
+  const project = ProjectModel.findOneAndUpdate({_id: id},
+    {$push: {files: {link: req.file.location, size: req.file.size}}},
+    {safe: true, upsert: true},
+    (error, model) => {
+      if(error){
+        res.send(error)
+      }
+      console.log(model);
+      res.send("Success!");
+    }
+    );
+}
+
 function genericError(error){
   return error ? 
     `Error: While trying to ${genericError.caller} on Project-controller: " + ${error}` : 
@@ -87,5 +103,6 @@ module.exports = {
   show,
   update,
   create,
-  findCurrent
+  findCurrent,
+  uploadFile
 }

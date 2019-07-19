@@ -1,6 +1,7 @@
 const { Schema } = require('mongoose');
 const NotificationSchema = require('./notification_schema');
 const passportLocalMongoose = require('passport-local-mongoose');
+const FileSchema =  require("./file_schema");
 
 const UserSchema = new Schema({
   firstName: {
@@ -32,6 +33,10 @@ const UserSchema = new Schema({
       default: null,
     }
   }],
+
+  profilePicture: {
+    type: String,
+  },
 
   notifications: [NotificationSchema],
 
