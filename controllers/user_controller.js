@@ -52,11 +52,18 @@ function logout(req, res) {
   res.send("logged out?");
 }
 
+async function uploadFile(req, res) {
+  const { id } = req.body;
+  const user = await UserModel.findOneAndUpdate({_id: id},{profilePicture});
+  res.send(user);
+}
+
 module.exports = {
   index,
   show,
   update,
   register,
   login,
-  logout
+  logout,
+  uploadFile
 };

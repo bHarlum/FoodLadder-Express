@@ -17,8 +17,6 @@ const fileTypes = {
 };
 
 const filter = (req, file, cb) => {
-  console.log("running file filter");
-  console.log(file);
   if(fileTypes[file.mimetype]){
     cb(null, true);
   }
@@ -44,4 +42,4 @@ const upload = multer({
   })
 });
 
-module.exports = upload;
+module.exports = upload.single('file');

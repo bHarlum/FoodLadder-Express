@@ -26,17 +26,7 @@ const UserSchema = new Schema({
     default: false
   },
 
-  filePerm: {
-    maxUsage: {
-      type: Number
-    },
-    currentUsage: {
-      type: Number,
-      default: 0
-    }
-  },
-
-  files: [FileSchema],
+  profilePicture: {FileSchema},
 
   notifications: [NotificationSchema],
 

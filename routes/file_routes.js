@@ -1,16 +1,27 @@
 const express = require("express");
 const router = express.Router();
 const upload = require("./../services/resource_bucket/upload_manager");
-const singleUpload = upload.single('file');
+// const singleUpload = upload.single('file');
+
+
 
 
 router.post('/upload', (req,res) => {
-  console.log("printing from route" + req.file)
-  singleUpload(req,res,(error) => {
-    if(error) return console.log(error);
+  upload(req,res,(error) => {
+    if(error) return error;
     return res.json({imageUrl: req.file.location })
   });
 });
+
+
+// const filter = (req, file, cb) => {
+//   if(fileTypes[file.mimetype]){
+//     cb(null, true);
+//   }
+//   else{
+//     cb(new Error(`Invalid file type, valid formats: ${Object.keys(fileTypes)}`));
+//   }
+// }
 
 router.get('/download', (req, res, next) => {
   const file = 'df.csv';
@@ -26,7 +37,7 @@ router.get('/download', (req, res, next) => {
   s3.getObject(options, function(err, data) {
     res.attachment(file);
     res.send(data.Body);
-});
+  });
 });
 
 module.exports = router;
