@@ -26,6 +26,14 @@ const UserSchema = new Schema({
     default: false
   },
 
+  projects: [{
+    projectId: {
+      // TODO: could be of Type ObjectId #####
+      type: String,
+      default: null,
+    }
+  }],
+
   profilePicture: {FileSchema},
 
   notifications: [NotificationSchema],
@@ -38,7 +46,7 @@ const UserSchema = new Schema({
 
 UserSchema.plugin(passportLocalMongoose, { 
   usernameField: 'email', 
-  selectFields: 'firstName lastName phone notifications createdAt' 
+  selectFields: 'firstName lastName phone notifications projects createdAt' 
 });
 
 module.exports = UserSchema;
