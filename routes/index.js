@@ -12,6 +12,5 @@ router.use('/projects', ProjectRoutes);
 router.use('/notifications', NotificationRoutes);
 router.use('/threads', ThreadRoutes);
 router.use('/users', UserRoutes);
-router.use('/file', FileRoutes);
 
 module.exports = router;
