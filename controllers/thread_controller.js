@@ -4,7 +4,7 @@ async function index(req, res) {
   // get all threads
   try {
     const threads = await ThreadModel.find();
-    threads.length == 0 ? res.send("Oh no! There doesn't seem to be any threads. ¯\\_(ツ)_/¯") : res.send(threads);
+    threads.length == 0 ? res.send(null) : res.send(threads);
   } catch(err) {
     console.log("Encountered an error while trying to get all threads " +  err);
   }
@@ -14,13 +14,17 @@ async function index(req, res) {
 // KEY: 'id'
 async function show(req, res) {
   let response  = "Default response for thread-show function. Something has gone wrong";
+  const { id } = req.params;
+  console.log(id);
   try {
-  // Using findOneAndUpdate over findOne to update the view count on each request.
-  const thread = await ThreadModel.findOneAndUpdate(req.body.id, {$inc: {views: 1}}, {new: true});
-  response = thread;
+    // Using findOneAndUpdate over findOne to update the view count on each request.
+    const thread = await ThreadModel.findOneAndUpdate( { _id: id }, {$inc: {views: 1}}, {new: true});
+    response = thread;
+    console.log(thread);
+
   } catch (error) {
-    response = "Error: Ran into an error while trying to get/update a thread. " + error;
-  }
+      response = "Error: Ran into an error while trying to get/update a thread. " + error;
+    }
   res.send(response);  
 }
 
@@ -28,7 +32,6 @@ async function show(req, res) {
 // KEY: 'updatedThread'
 async function update(req, res) {
   // Unpacking request
-  console.log(req.body);
   const {updatedThread} = req.body;
 
   // declares and sets default value for response
@@ -39,8 +42,8 @@ async function update(req, res) {
   else {
   // Attempting to update thread
     try {
-      const thread = await ThreadModel.update(updatedThread);
-      response =  "update successful";
+      const thread = await ThreadModel.findOneAndUpdate({ _id: req.params.id }, updatedThread, { new: true });
+      response = thread;
     } 
     catch (error) {
       response = customErrorMessage(error);
