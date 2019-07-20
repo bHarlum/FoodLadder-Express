@@ -21,7 +21,7 @@ function generator(target) {
   var email = {
     body: {
         name: `${target.name}`,
-        intro: 'Welcome to Food Ladder! We\'re very excited to have you on board.',
+        intro: `Welcome to Food Ladder! ${target.projectName} We\'re very excited to have you on board.`,
         action: {
             instructions: 'To get started with Food Ladder, please click the button below.',       
             button: {

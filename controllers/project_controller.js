@@ -19,11 +19,11 @@ async function index(req, res) {
 async function show(req, res) {
   let response = genericError();
   try{
-    const project = await ProjectModel.findOne(req.body.id);
+    const project = await ProjectModel.findOne({ _id: req.params.id});
     response = project;
   }catch (error){
-    console.log(error)
-    response = genericError(error);
+    console.log(error.message);
+    response = null;
   }
   res.send(response);
 }
@@ -35,7 +35,7 @@ async function update(req, res) {
   const {updatedProject} =  req.body;
   try {
     const project = await ProjectModel.updateOne(updatedProject);
-    response = "Success! Project updated.";
+    response = project;
   }catch(error){
     console.log(error);
     response =  (error);
@@ -49,11 +49,11 @@ async function create(req, res) {
   let response = genericError();
   const {newProject} = req.body;
 
-
   try {
     const project = await ProjectModel.create(newProject)
       await generator({
       email: project.users[0].email, 
+      projectName: project.name,
       name: newProject.userName, 
       code: project._id});
       response = "Success! Project created.";
@@ -63,6 +63,33 @@ async function create(req, res) {
     console.log(error);
   }
   res.send(response);
+}
+
+function findCurrent(req, res) {
+  const { user } = req;
+  const projects = user.projects.map(el => {
+    return el.projectId;
+  });
+  ProjectModel.find({ _id: {
+    $in: projects
+  }}, function(err, docs){
+    res.send(docs);
+  });
+}
+
+function uploadFile(req, res) {
+  const { id } = req.body;
+  const project = ProjectModel.findOneAndUpdate({_id: id},
+    {$push: {files: {link: req.file.location, size: req.file.size}}},
+    {safe: true, upsert: true},
+    (error, model) => {
+      if(error){
+        res.send(error)
+      }
+      console.log(model);
+      res.send("Success!");
+    }
+    );
 }
 
 function genericError(error){
@@ -75,5 +102,7 @@ module.exports = {
   index,
   show,
   update,
-  create
+  create,
+  findCurrent,
+  uploadFile
 }
