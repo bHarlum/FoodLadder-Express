@@ -1,12 +1,7 @@
-const aws = require("aws-sdk");
+
 const multer = require("multer");
 const multerS3 = require("multer-s3");
-
- const s3 = new aws.S3({
-  secretAccessKey: process.env.S3_PRIVATE,
-  accessKeyId: process.env.S3_PUBLIC,
-  region: 'ap-southeast-2'
-});
+const s3 = require("./s3_config");
 
 // File type whitelist
 const fileTypes = {
