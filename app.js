@@ -5,9 +5,33 @@ const cors = require("cors");
 const passport = require("./config/passport");
 const session = require('express-session');
 
+
+const whitelist = [
+  "http://food-ladder-bucket.s3-website-ap-southeast-2.amazonaws.com",
+  "http://localhost:3000"
+]
+
 app.use(cors({
-  origin: "http://food-ladder-bucket.s3-website-ap-southeast-2.amazonaws.com"
+  origin: (origin, callback) => {
+    if(whitelist.inddexOf(origin) !== -1) {
+      callback(null, true);
+    }
+    else {
+      callback(new Error('Not allowed. Blocked by CORS.'))
+    }
+  }
 }));
+
+// var whitelist = ['http://example1.com', 'http://example2.com']
+// var corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Not allowed by CORS'))
+//     }
+//   }
+// }
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
