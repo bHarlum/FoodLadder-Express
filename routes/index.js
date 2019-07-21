@@ -15,6 +15,5 @@ router.use('/projects', passport.authenticate("jwt", { session: false }), Projec
 router.use('/notifications', passport.authenticate("jwt", { session: false }), NotificationRoutes);
 router.use('/threads', passport.authenticate("jwt", { session: false }), ThreadRoutes);
 router.use('/users', UserRoutes);
-router.use('/file', passport.authenticate("jwt", { session: false }), FileRoutes);
 
 module.exports = router;
