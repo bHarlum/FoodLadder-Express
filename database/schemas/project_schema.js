@@ -1,4 +1,4 @@
-const {Schema} = require("mongoose");
+const { Schema } = require("mongoose");
 
 const NotificationSchema = require("./notification_schema");
 const ReportSchema = require("./report_schema");

@@ -10,7 +10,7 @@ const UserRoutes = require('./user_routes');
 
 router.get('/', (req, res) => res.send('welcome'));
 
-router.use('/projects', passport.authenticate("jwt", { session: false }), ProjectRoutes);
+router.use('/projects', ProjectRoutes);
 router.use('/notifications', passport.authenticate("jwt", { session: false }), NotificationRoutes);
 router.use('/threads', passport.authenticate("jwt", { session: false }), ThreadRoutes);
 router.use('/users', UserRoutes);

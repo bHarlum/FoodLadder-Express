@@ -22,9 +22,10 @@ router.post('/register', celebrate({
   body: {
     firstName: Joi.string().required(), 
     lastName: Joi.string().required(), 
-    phone: Joi.string().required(), 
-    email: Joi.string().email({ minDomainSegments: 2 }), 
-    password: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/), 
+    phone: Joi.string(), 
+    email: Joi.string().email({ minDomainSegments: 2 }).required(), 
+    password: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required(), 
+    projectId: Joi.string().required(), 
   }
 }), UserController.register);
 
