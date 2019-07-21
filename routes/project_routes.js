@@ -5,15 +5,15 @@ const upload = require("./../services/resource_bucket/upload_manager");
 
 const ProjectController = require("./../controllers/project_controller");
 
-router.get("/", ProjectController.index);
+router.get("/", passport.authenticate("jwt", { session: false }), ProjectController.index);
 router.get("/:id", ProjectController.show);
 router.get("/user/current", passport.authenticate("jwt", { session: false }), ProjectController.findCurrent);
 
 router.put("/:id/update", ProjectController.update);
 router.patch("/:id/update", ProjectController.update);
 
-router.post("/", ProjectController.create);
+router.post("/", passport.authenticate("jwt", { session: false }), ProjectController.create);
 
-router.post('/upload', upload, ProjectController.uploadFile);
+router.post('/upload', passport.authenticate("jwt", { session: false }), upload, ProjectController.uploadFile);
 
 module.exports = router;

@@ -8,7 +8,8 @@
     "seed": "node database/seeds",
     "dev-server": "nodemon index.js",
     "server": "forever -c \"nodemon --exitcrash -L\" index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test-server": "nodemon test.js"
   },
   "author": "",
   "license": "ISC",
