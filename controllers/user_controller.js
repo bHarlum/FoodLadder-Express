@@ -10,6 +10,7 @@ async function index(req, res) {
 }
 
 function show(req, res) {
+  console.log("Getting user by ID\n-----------------------------\n");
   const { user } = req;
   const { _id: id, firstName, lastName, admin } = user;
   return res.send({ id, firstName, lastName, admin});
@@ -37,11 +38,11 @@ function update(req, res) {
 async function register(req, res, next) {
 	const { firstName, lastName, phone, email, password, projectId } = req.body;
 
-	UserModel.register({ firstName, lastName, phone, email }, password, function(err, user) {
+	UserModel.register({ firstName, lastName, phone, email }, password, async function(err, user) {
 		if (err) {
 			console.log(err);
     }
-    const newUser = UserModel.findByIdAndUpdate(
+    const newUser = await UserModel.findByIdAndUpdate(
       user._id,
       {$push: {projects: {projectId}}},
       {safe: true, upsert: true},

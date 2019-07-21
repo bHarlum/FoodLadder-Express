@@ -7,7 +7,7 @@ const ThreadSchema = new Schema({
     type: String,
     required: true,
   },
-
+  
   posts: [PostSchema],
 
   views: {
