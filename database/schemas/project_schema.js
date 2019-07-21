@@ -10,6 +10,11 @@ const ProjectSchema = new Schema({
     required: true,
   },
 
+  activated: {
+    type: Boolean,
+    default: false,
+  },
+
   uniqueCode: {
     value: {
       type: String,

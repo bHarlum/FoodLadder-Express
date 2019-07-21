@@ -1,4 +1,5 @@
 const UserModel = require('./../database/models/user_model');
+const ProjectModel = require("./../database/models/project_model");
 const JWTService = require("./../services/jwt_service");
 
 async function index(req, res) {
@@ -40,16 +41,29 @@ async function register(req, res, next) {
 
 	UserModel.register({ firstName, lastName, phone, email }, password, async function(err, user) {
 		if (err) {
-			console.log(err);
+      console.log(err);
     }
-    const newUser = await UserModel.findByIdAndUpdate(
-      user._id,
+
+    const { _id } = user;
+
+    await UserModel.findByIdAndUpdate(
+      _id,
       {$push: {projects: {projectId}}},
-      {safe: true, upsert: true},
+      {upsert: true},
       function(err, model) {
           console.log(err);
       }
     )
+    
+    await ProjectModel.findByIdAndUpdate(
+      projectId,
+      { activated: true },
+      function(err, model) {
+        console.log("Updated project to activated")
+        console.log(err);
+      }
+    );
+ 
 
     const token = JWTService.generateToken(user._id);
 
@@ -77,6 +91,14 @@ async function login(req, res) {
           console.log(err);
       }
     )
+    await ProjectModel.findByIdAndUpdate(
+      projectId,
+      { activated: true },
+      function(err, model) {
+        console.log("Updated project to activated")
+        console.log(err);
+      }
+    );
   }
 
   return res.json({ 
