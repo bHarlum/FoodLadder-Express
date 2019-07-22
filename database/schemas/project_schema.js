@@ -81,6 +81,10 @@ const ProjectSchema = new Schema({
     },
 
   },
+  
+  bio: {
+    type: String,
+  },
 
   reportDate: {
     type: Date,
