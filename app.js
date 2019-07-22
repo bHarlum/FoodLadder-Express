@@ -5,7 +5,6 @@ const cors = require("cors");
 const passport = require("./config/passport");
 const session = require('express-session');
 
-
 const whitelist = [
   "http://food-ladder-bucket.s3-website-ap-southeast-2.amazonaws.com",
   "http://localhost:3000"
