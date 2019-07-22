@@ -1,4 +1,5 @@
 const ThreadModel = require("./../database/models/thread_model");
+const UserModel = require("./../database/models/user_model");
 
 async function index(req, res) {
   // get all threads
@@ -31,8 +32,9 @@ async function show(req, res) {
 // REQUIREMENTS: Copy of updated object
 // KEY: 'updatedThread'
 async function update(req, res) {
+  console.log("Added new post to thread");
   // Unpacking request
-  const {updatedThread} = req.body;
+  const {updatedThread, userId} = req.body;
 
   // declares and sets default value for response
   let response = "Default response for thread-update function: Something has gone wrong!";
@@ -42,7 +44,20 @@ async function update(req, res) {
   else {
   // Attempting to update thread
     try {
-      const thread = await ThreadModel.findOneAndUpdate({ _id: req.params.id }, updatedThread, { new: true });
+      const thread = await ThreadModel.findOneAndUpdate({ 
+        _id: req.params.id 
+      }, updatedThread, { new: true });
+
+      const notification = { category: "threadReply" };
+
+      const newUser = await UserModel.findByIdAndUpdate(
+        userId,
+        {$push: {notifications: { ...notification}}},
+        {safe: true, upsert: true},
+        function(err, model) {
+            console.log(err);
+        }
+      )
       response = thread;
     } 
     catch (error) {

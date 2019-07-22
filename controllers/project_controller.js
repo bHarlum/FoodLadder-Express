@@ -48,14 +48,15 @@ async function update(req, res) {
 async function create(req, res) {
   let response = genericError();
   const {newProject} = req.body;
-
   try {
     const project = await ProjectModel.create(newProject)
       await generator({
       email: project.users[0].email, 
       projectName: project.name,
       name: newProject.userName, 
-      code: project._id});
+      code: project._id,
+      address: req.headers.origin,
+    });
       response = "Success! Project created.";
   } 
   catch (error){

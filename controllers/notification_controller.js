@@ -1,7 +1,7 @@
 const UserModel = require("./../database/models/user_model");
 const ProjectModel = require("./../database/models/project_model");
 
-function show(req, res) {
+function current(req, res) {
   return res.send("Notifications show");
 }
 
@@ -15,7 +15,7 @@ function destroy(req, res) {
 }
 
 module.exports = {
-  show,
+  current,
   create,
   destroy
 }
