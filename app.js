@@ -15,8 +15,12 @@ app.use(cors({
     if(whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     }
+    else if(origin === undefined){
+      callback(null, true);
+    }
     else {
-      callback(new Error('Not allowed. Blocked by CORS.'))
+      callback(new Error('Not allowed. Blocked by CORS.'));
+      console.log("AHA!!!");
     }
   }
 }));
