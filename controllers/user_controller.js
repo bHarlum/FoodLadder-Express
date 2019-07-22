@@ -44,16 +44,14 @@ async function register(req, res, next) {
       console.log(err);
     }
 
-    const { _id } = user;
-
     await UserModel.findByIdAndUpdate(
-      _id,
+      user._id,
       {$push: {projects: {projectId}}},
       {upsert: true},
       function(err, model) {
           console.log(err);
       }
-    )
+    );
     
     await ProjectModel.findByIdAndUpdate(
       projectId,
