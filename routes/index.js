@@ -8,7 +8,14 @@ const NotificationRoutes = require('./notification_routes');
 const ThreadRoutes = require('./thread_routes');
 const UserRoutes = require('./user_routes');
 
-router.get('/', (req, res) => res.send('welcome'));
+router.get('/', (req, res) => {
+  console.log("running root route");
+  try {
+    return res.send('welcome');
+  } catch (err) {
+    console.log(err);
+  }
+});
 
 router.use('/projects', ProjectRoutes);
 router.use('/notifications', passport.authenticate("jwt", { session: false }), NotificationRoutes);

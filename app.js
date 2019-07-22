@@ -5,7 +5,6 @@ const cors = require("cors");
 const passport = require("./config/passport");
 const session = require('express-session');
 
-
 const whitelist = [
   "http://food-ladder-bucket.s3-website-ap-southeast-2.amazonaws.com",
   "http://localhost:3000"
@@ -16,8 +15,12 @@ app.use(cors({
     if(whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     }
+    else if(origin === undefined){
+      callback(null, true);
+    }
     else {
-      callback(new Error('Not allowed. Blocked by CORS.'))
+      callback(new Error('Not allowed. Blocked by CORS.'));
+      console.log("AHA!!!");
     }
   }
 }));
