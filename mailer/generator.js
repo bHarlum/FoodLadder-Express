@@ -1,10 +1,10 @@
 const Mailgen = require('mailgen');
 const mailer = require("./mailer");
-require("dotenv");
 
  
 // REQUIREMENTS: Object: target = {name: String, email: String}
 function generator(target) {
+    console.log("-=-=-=-=-",target.address);
   // Configure mailgen by setting a theme and your product info
   var mailGenerator = new Mailgen({
       theme: 'salted',
@@ -27,10 +27,10 @@ function generator(target) {
             button: {
                 color: '#22BC66', // Optional action button color
                 text: 'Confirm your account',
-                link: `http://localhost:3000/register/${target.code}`
+                link: `${target.address}/register/${target.code}`
             }
         },
-        outro: `Button not working? Visit: http://localhost:3000 and enter the code ${target.code}`
+        outro: `Button not working? Visit: ${target.address} and enter the code ${target.code}`
     }
   };
 
