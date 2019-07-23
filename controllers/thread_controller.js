@@ -21,8 +21,6 @@ async function show(req, res) {
     // Using findOneAndUpdate over findOne to update the view count on each request.
     const thread = await ThreadModel.findOneAndUpdate( { _id: id }, {$inc: {views: 1}}, {new: true});
     response = thread;
-    console.log(thread);
-
   } catch (error) {
       response = "Error: Ran into an error while trying to get/update a thread. " + error;
     }
