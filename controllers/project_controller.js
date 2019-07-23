@@ -81,7 +81,7 @@ function findCurrent(req, res) {
 function uploadFile(req, res) {
   const { id } = req.headers;
   const project = ProjectModel.findOneAndUpdate({_id: id},
-    {$push: {files: {link: req.file.location, size: req.file.size}}},
+    {$push: {files: {link: req.file.key, size: req.file.size}}},
     {safe: true, upsert: true},
     (error, model) => {
       if(error){

@@ -1,12 +1,7 @@
-const aws = require("aws-sdk");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
 
- const s3 = new aws.S3({
-  secretAccessKey: process.env.S3_PRIVATE,
-  accessKeyId: process.env.S3_PUBLIC,
-  region: 'ap-southeast-2'
-});
+const s3 = require("./s3_bucket");
 
 // File type whitelist
 const fileTypes = {
@@ -32,11 +27,9 @@ const upload = multer({
     s3,
     bucket: 'food-ladder-resources-bucket',
     metadata: (req, file, cb) => {
-      console.log("metadata")
       cb(null, {fieldName: file.fieldname});
     },
     key: function (req, file, cb) {
-      console.log(file.originalname);
       cb(null, `uploads/${Date.now().toString()}-${file.originalname}`)
     }
   })
