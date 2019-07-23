@@ -110,6 +110,15 @@ async function destroy(req, res) {
   }
 }
 
+function upload(req, res) {
+  if(req.error){
+    console.log(req.error);
+    res.send(req.error);
+  } else {
+    res.send({link: req.file.location, size: req.file.size});
+  }
+}
+
 function customErrorMessage(error){
   return `Error: While trying to ${customErrorMessage.caller} on thread: " + ${error}`
 }
@@ -119,5 +128,6 @@ module.exports = {
   show,
   update,
   create,
-  destroy
+  destroy,
+  upload
 } 
