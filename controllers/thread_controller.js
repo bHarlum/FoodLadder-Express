@@ -21,8 +21,6 @@ async function show(req, res) {
     // Using findOneAndUpdate over findOne to update the view count on each request.
     const thread = await ThreadModel.findOneAndUpdate( { _id: id }, {$inc: {views: 1}}, {new: true});
     response = thread;
-    console.log(thread);
-
   } catch (error) {
       response = "Error: Ran into an error while trying to get/update a thread. " + error;
     }
@@ -108,6 +106,16 @@ async function destroy(req, res) {
       console.log(response);
     }
   }
+  res.send(response);
+}
+
+function upload(req, res) {
+  if(req.error){
+    console.log(req.error);
+    res.send(req.error);
+  } else {
+    res.send({key: req.file.key, size: req.file.size});
+  }
 }
 
 function customErrorMessage(error){
@@ -119,5 +127,6 @@ module.exports = {
   show,
   update,
   create,
-  destroy
+  destroy,
+  upload
 } 

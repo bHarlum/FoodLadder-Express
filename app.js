@@ -20,7 +20,6 @@ app.use(cors({
     }
     else {
       callback(new Error('Not allowed. Blocked by CORS.'));
-      console.log("AHA!!!");
     }
   }
 }));

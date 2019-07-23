@@ -31,22 +31,20 @@ async function show(req, res) {
 // REQUIREMENTS: copy of updated object.
 // KEY: 'updatedProject'
 async function update(req, res) {
-  let response =  genericError();
-  const {updatedProject} =  req.body;
-  try {
-    const project = await ProjectModel.updateOne(updatedProject);
-    response = project;
-  }catch(error){
-    console.log(error);
-    response =  (error);
-  }
-  res.send(response);
+  const {updatedProject, projectId} =  req.body;
+  ProjectModel.findOneAndUpdate(
+    { _id: projectId },
+    { ...updatedProject }
+  ).then(response => {
+    res.send(response);
+  }).catch(err => {
+    res.send(err);
+  });
 }
 
 // REQUIREMENTS: A copy of the new Object.
 // KEY: 'newProject'
 async function create(req, res) {
-  let response = genericError();
   const {newProject} = req.body;
   try {
     const project = await ProjectModel.create(newProject)
@@ -57,13 +55,12 @@ async function create(req, res) {
       code: project._id,
       address: req.headers.origin,
     });
-      response = "Success! Project created.";
+    res.send("success");
   } 
   catch (error){
-    response = genericError(error);
-    console.log(error);
+    res.status(500);
+    res.send("Server error");
   }
-  res.send(response);
 }
 
 function findCurrent(req, res) {
@@ -78,10 +75,10 @@ function findCurrent(req, res) {
   });
 }
 
-function uploadFile(req, res) {
+async function uploadFile(req, res) {
   const { id } = req.headers;
   const project = ProjectModel.findOneAndUpdate({_id: id},
-    {$push: {files: {link: req.file.location, size: req.file.size}}},
+    {$push: {files: {link: req.file.key, size: req.file.size}}},
     {safe: true, upsert: true},
     (error, model) => {
       if(error){

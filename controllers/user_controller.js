@@ -2,38 +2,53 @@ const UserModel = require('./../database/models/user_model');
 const ProjectModel = require("./../database/models/project_model");
 const JWTService = require("./../services/jwt_service");
 
+// Returns a list of all user emails
 async function index(req, res) {
-  const users = await UserModel.find();
-  const emails = users.map(user => {
-    return user.email;
-  });
-  return res.send(emails);
+  UserModel.find()
+    .then(users => {
+      const emails = users.map(user => {
+        return user.email;
+      });
+      return res.send(emails);
+    }).catch(err => {
+      res.status(err.status);
+      res.send(err);
+    })
 }
 
+// Gets current user
 function show(req, res) {
-  console.log("Getting user by ID\n-----------------------------\n");
   const { user } = req;
   const { _id: id, firstName, lastName, admin } = user;
   return res.send({ id, firstName, lastName, admin});
 }
 
+//Gets user by email (uses params)
 async function find(req, res) {
   const { userEmail } = req.params;
-  console.log("Getting user by email\n-----------------------------\n")
   const user = await UserModel.findOne({ email: userEmail }, function(err, obj) {
     if(err){
       return null;
     }
-
     return obj;
   });
-  console.log("-----------------------------\nUser=")
-  console.log(user);
+
   return user ? res.send(user) : res.send(null);
 }
 
 function update(req, res) {
-  return res.send("empty update function");
+  const { user } = req;
+  const { _id } = user; 
+  const { updatedValues } = req.body;
+  UserModel.findOneAndUpdate(
+    { _id },
+    { ...updatedValues }
+  ).then(response => {
+    res.send(response);
+  }).catch(err => {
+    res.status(err.status);
+    res.send(err.message);
+  })
 }
 
 async function register(req, res, next) {
@@ -78,9 +93,7 @@ async function login(req, res) {
   const { projectId } = req.body;
   const token = JWTService.generateToken(user);
   
-  console.log(projectId);
   if(projectId){
-    console.log("adding project to user");
     await UserModel.findByIdAndUpdate(
       user._id,
       {$push: {projects: {projectId}}},
@@ -93,7 +106,6 @@ async function login(req, res) {
       projectId,
       { activated: true },
       function(err, model) {
-        console.log("Updated project to activated")
         console.log(err);
       }
     );
@@ -122,7 +134,6 @@ module.exports = {
   show,
   find,
   update,
-  // addProject,
   register,
   login,
   logout,
