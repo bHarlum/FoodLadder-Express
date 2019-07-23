@@ -75,7 +75,7 @@ function findCurrent(req, res) {
   });
 }
 
-function uploadFile(req, res) {
+async function uploadFile(req, res) {
   const { id } = req.headers;
   const project = ProjectModel.findOneAndUpdate({_id: id},
     {$push: {files: {link: req.file.key, size: req.file.size}}},
