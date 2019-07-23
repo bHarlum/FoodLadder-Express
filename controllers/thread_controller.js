@@ -106,6 +106,7 @@ async function destroy(req, res) {
       console.log(response);
     }
   }
+  res.send(response);
 }
 
 function upload(req, res) {
@@ -113,7 +114,7 @@ function upload(req, res) {
     console.log(req.error);
     res.send(req.error);
   } else {
-    res.send({link: req.file.location, size: req.file.size});
+    res.send({key: req.file.key, size: req.file.size});
   }
 }
 

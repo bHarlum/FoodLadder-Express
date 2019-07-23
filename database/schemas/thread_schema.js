@@ -11,7 +11,7 @@ const ThreadSchema = new Schema({
   
   posts: [PostSchema],
 
-  file: {FileSchema},
+  file: (FileSchema),
 
   views: {
     type: Number,
