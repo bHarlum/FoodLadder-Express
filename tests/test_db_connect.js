@@ -9,7 +9,7 @@ function testConnection(){
     mongoose.connection.on("error", err => console.log(err));
   });
 
-  afterEach(() => {
+  afterAll(() => {
     mongoose.connection.close();
   });
 
