@@ -15,9 +15,6 @@ router.get('/',
 router.get('/:id', passport.authenticate("jwt", { session: false }), UserController.show);
 router.get('/find/:userEmail', UserController.find);
 
-// router.put('/update/projects', UserController.addProject);
-// router.patch('/update/projects', UserController.addProject);
-
 router.post('/register', celebrate({
   body: {
     firstName: Joi.string().required(), 
@@ -32,7 +29,11 @@ router.post('/register', celebrate({
 router.post("/login", passport.authenticate('local', {
   session: false
 }), UserController.login);
+
 router.get('/auth/logout', UserController.logout);
+
+// router.put('/update', passport.authenticate("jwt", { session: false }), UserController.update);
+// router.patch('/update', passport.authenticate("jwt", { session: false }), UserController.update);
 
 router.post('/upload', upload, UserController.uploadFile);
 
