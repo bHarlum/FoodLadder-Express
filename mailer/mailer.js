@@ -1,7 +1,5 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
-// const mailFile = require("./mail.html");
-const fs = require("fs");
 
 // REQUIREMENTS: Object: target = {name: String, email: String}
 function mailer(target, email){
@@ -23,7 +21,8 @@ function mailer(target, email){
 
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
-      console.log(error);
+      console.log("Error sending mailer");
+      console.log(error.message);
     } else {
       console.log('Email sent: ' + info.response);
     }

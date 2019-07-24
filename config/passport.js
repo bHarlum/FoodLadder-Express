@@ -13,7 +13,7 @@ passport.use(new LocalStrategy({
     try {
       console.log("running local strategy");
       const { user } = await UserModel.authenticate()(email, password);
-      console.log(`user = ${user}`);
+      // console.log(`user = ${user}`);
       if (user) {
           return done(null, user);
       }
