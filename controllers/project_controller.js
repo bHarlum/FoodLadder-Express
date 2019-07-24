@@ -2,7 +2,7 @@ const ProjectModel = require("./../database/models/project_model");
 const generator = require("./../mailer/generator");
 
 // Returns an array of all projects
-async function index(req, res, next) {
+function index(req, res, next) {
   ProjectModel.find()
     .then(projects => {
       return res.send(projects);
@@ -13,16 +13,13 @@ async function index(req, res, next) {
 
 // REQUIREMENTS: id for the project you want to retrieve
 // KEY: 'id'
-async function show(req, res) {
-  let response = genericError();
-  try{
-    const project = await ProjectModel.findOne({ _id: req.params.id});
-    response = project;
-  }catch (error){
-    console.log(error.message);
-    response = null;
-  }
-  res.send(response);
+async function show(req, res, next) {
+  ProjectModel.findOne({ _id: req.params.id})
+    .then(project => {
+      res.send(project);
+    }).catch(err => {
+      next(new HTTPError(err.status, err.message));
+    });
 }
 
 // REQUIREMENTS: copy of updated object.
