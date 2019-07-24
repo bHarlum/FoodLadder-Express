@@ -25,14 +25,14 @@ async function show(req, res, next) {
 // REQUIREMENTS: copy of updated object.
 // KEY: 'updatedProject'
 async function update(req, res) {
-  const {updatedProject, projectId} =  req.body;
+  const {updatedProject, projectId} = req.body;
   ProjectModel.findOneAndUpdate(
     { _id: projectId },
     { ...updatedProject }
-  ).then(response => {
-    res.send(response);
+  ).then(project => {
+    res.send(project);
   }).catch(err => {
-    res.send(err);
+    next(new HTTPError(err.status, err.message));
   });
 }
 
