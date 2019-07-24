@@ -1,14 +1,25 @@
 require('dotenv').config();
 const request = require('supertest');
 const app = require('./../../../app');
-const mongoose = require('mongoose');
+const testConnection = require("./../../test_db_connect");
+const JWTService = require("./../../../services/jwt_service");
 
-beforeEach(() => {
-  mongoose.connect(process.env.DB_HOST_TEST, { useNewUrlParser: true });
-  mongoose.Promise = global.Promise;
-  mongoose.connection.on("error", err => console.log(err));
-});
+testConnection();
 
-afterEach(() => {
-  mongoose.connection.close();
+//const token = JWTService.generateToken(user._id);
+
+describe('Testing register route ', () => {
+  it('Empty request, expect bad request.', (done) => {
+    request(app)
+      .post('/users/register')
+      .send({})
+      .expect(400, done);
+  });
+
+  it('Request with correct data.', (done) => {
+    request(app)
+      .post('/users/register')
+      .send({})
+      .expect(400, done);
+  });
 });
