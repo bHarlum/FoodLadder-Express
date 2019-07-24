@@ -5,7 +5,7 @@ const testConnection = require("./../../test_db_connect");
 
 testConnection();
 
-describe('GET /', function() {
+describe('GET /', () => {
   it('testing root route', function(done) {
     request(app)
       .get('/')
