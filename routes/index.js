@@ -9,12 +9,11 @@ const ThreadRoutes = require('./thread_routes');
 const UserRoutes = require('./user_routes');
 const FileRoutes = require('./file_routes');
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
   try {
     return res.send('welcome');
   } catch (err) {
-    console.log(err);
-    res.send(err)
+    return next(new HTTPError(err.status, err.message));
   }
 });
 
