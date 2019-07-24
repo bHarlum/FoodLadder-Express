@@ -26,4 +26,39 @@ describe('Log in with admin user', function() {
       .send({ ...user })
       .expect(200, done);
   });
+
+  it('Enter wrong username and correct password. Expect Unauthorized.', function(done) {
+    request(app)
+      .post('/users/login')
+      .send({email: 'fakeuser@user.com', password: user.password })
+      .expect(401, done);
+  });
+
+  it('Enter correct username and wrong password. Expect Unauthorized.', function(done) {
+    request(app)
+      .post('/users/login')
+      .send({email: user.email, password: "abc123!@#" })
+      .expect(401, done);
+  });
+
+  it('Send empty object. Expect bad request', function(done) {
+    request(app)
+      .post('/users/login')
+      .send({})
+      .expect(400, done);
+  });
+
+  it('Send only one email. Expect bad request', function(done) {
+    request(app)
+      .post('/users/login')
+      .send({email: user.email})
+      .expect(400, done);
+  });
+
+  it('Send only one password. Expect bad request', function(done) {
+    request(app)
+      .post('/users/login')
+      .send({email: user.email})
+      .expect(400, done);
+  });
 });
