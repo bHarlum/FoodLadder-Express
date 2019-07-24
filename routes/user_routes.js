@@ -19,11 +19,8 @@ router.post('/register', celebrate({
   body: {
     firstName: Joi.string().required(), 
     lastName: Joi.string().required(), 
-    phone: Joi.string()
-              .regex(/[0-9\+\-]/)
-              .error(new Error("That doesn't seem to be a valid phone number.")),
-    email: Joi.string()
-              .email({ minDomainSegments: 2 }).required(), 
+    phone: Joi.string().regex(/[0-9\+\-]/),
+    email: Joi.string().email({ minDomainSegments: 2 }).required(), 
     password: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required(), 
     projectId: Joi.string().required(), 
   }
@@ -33,7 +30,12 @@ router.post("/login", passport.authenticate('local', {
   session: false
 }), UserController.login);
 
-router.get('/auth/logout', UserController.logout);
+router.get('/auth/logout', celebrate({
+  body: {
+    email: Joi.string().email({ minDomainSegments: 2 }).required(),
+    password: Joi.string().required()
+  }
+}), UserController.logout);
 
 // router.put('/update', passport.authenticate("jwt", { session: false }), UserController.update);
 // router.patch('/update', passport.authenticate("jwt", { session: false }), UserController.update);
