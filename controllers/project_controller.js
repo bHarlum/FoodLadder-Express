@@ -64,15 +64,22 @@ async function create(req, res) {
 }
 
 function findCurrent(req, res) {
-  const { user } = req;
-  const projects = user.projects.map(el => {
-    return el.projectId;
-  });
-  ProjectModel.find({ _id: {
-    $in: projects
-  }}, function(err, docs){
-    res.send(docs);
-  });
+  try {
+    const { user } = req;
+    const projects = user.projects.map(el => {
+      return el.projectId;
+    });
+    ProjectModel.find({ _id: {
+      $in: projects
+    }}, function(err, docs){
+      if(err) {
+        next(new DatabaseError(err.status, err.message));
+      }
+      res.send(docs);
+    });
+  } catch (err) {
+    next(new HTTPError(err.status, err.message));
+  }
 }
 
 async function uploadFile(req, res) {
@@ -88,12 +95,6 @@ async function uploadFile(req, res) {
       res.send("Success!");
     }
     );
-}
-
-function genericError(error){
-  return error ? 
-    `Error: While trying to ${genericError.caller} on Project-controller: " + ${error}` : 
-    `Error: Unhandled case. ${genericError.caller} on Project-controller.`;
 }
 
 module.exports = {
