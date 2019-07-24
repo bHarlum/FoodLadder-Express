@@ -1,17 +1,14 @@
 const ProjectModel = require("./../database/models/project_model");
 const generator = require("./../mailer/generator");
 
-// 
-async function index(req, res) {
-  let response = genericError();
-  try{
-    const projects = await ProjectModel.find();
-    response = projects;
-  } catch (error) {
-    console.log(error);
-    response = genericError(error);
-  }
-  res.send(response);
+// Returns an array of all projects
+async function index(req, res, next) {
+  ProjectModel.find()
+    .then(projects => {
+      return res.send(projects);
+    }).catch(err =>{
+      next(new HTTPError(err.status, err.message));
+    });
 }
 
 // REQUIREMENTS: id for the project you want to retrieve
