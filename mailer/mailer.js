@@ -23,7 +23,8 @@ function mailer(target, email){
 
   transporter.sendMail(mailOptions, function(error, info){
     if (error) {
-      console.log(error);
+      console.log("Error sending mailer");
+      console.log(error.message);
     } else {
       console.log('Email sent: ' + info.response);
     }

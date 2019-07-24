@@ -1,6 +1,6 @@
 const ThreadModel = require("./../database/models/thread_model");
 
-
+//TODO: This isn't being used yet!
 async function update(req, res) {
   const updatedThread = req.body;
   const {id: _id} = updatedThread; 

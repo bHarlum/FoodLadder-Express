@@ -3,10 +3,10 @@ const mailer = require("./mailer");
 
  
 // REQUIREMENTS: Object: target = {name: String, email: String}
-function generator(target) {
+async function generator(target) {
     console.log("-=-=-=-=-",target.address);
   // Configure mailgen by setting a theme and your product info
-  var mailGenerator = new Mailgen({
+  const mailGenerator = new Mailgen({
       theme: 'salted',
       product: {
           // Appears in header & footer of e-mails
@@ -18,7 +18,7 @@ function generator(target) {
   });
 
 
-  var email = {
+  const email = {
     body: {
         name: `${target.name}`,
         intro: `Welcome to Food Ladder! ${target.projectName} We\'re very excited to have you on board.`,
@@ -35,7 +35,7 @@ function generator(target) {
   };
 
   // Generate an HTML email with the provided contents
-  var emailBody = mailGenerator.generate(email);
+  const emailBody = await mailGenerator.generate(email);
 
   console.log("mail file generated.");
   mailer(target, emailBody);

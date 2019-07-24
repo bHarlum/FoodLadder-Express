@@ -44,6 +44,7 @@ app.use(require('./routes'));
 app.use(express.static('public'));
 
 app.use(require('./middleware/error_handler_middleware'));
+app.use(require('./middleware/validation_handler_middleware'));
 
 require('./database/connect');
 

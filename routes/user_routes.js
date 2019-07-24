@@ -19,7 +19,7 @@ router.post('/register', celebrate({
   body: {
     firstName: Joi.string().required(), 
     lastName: Joi.string().required(), 
-    phone: Joi.string(), 
+    phone: Joi.string().regex(/[0-9\+\-]/),
     email: Joi.string().email({ minDomainSegments: 2 }).required(), 
     password: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required(), 
     projectId: Joi.string().required(), 
@@ -28,6 +28,12 @@ router.post('/register', celebrate({
 
 router.post("/login", passport.authenticate('local', {
   session: false
+}), celebrate({
+  body: {
+    email: Joi.string().email({ minDomainSegments: 2 }).required(),
+    password: Joi.string().required(),
+    projectId: Joi.string()
+  }
 }), UserController.login);
 
 router.get('/auth/logout', UserController.logout);
