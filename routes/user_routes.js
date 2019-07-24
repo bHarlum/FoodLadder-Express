@@ -28,14 +28,15 @@ router.post('/register', celebrate({
 
 router.post("/login", passport.authenticate('local', {
   session: false
-}), UserController.login);
-
-router.get('/auth/logout', celebrate({
+}), celebrate({
   body: {
     email: Joi.string().email({ minDomainSegments: 2 }).required(),
-    password: Joi.string().required()
+    password: Joi.string().required(),
+    projectId: Joi.string()
   }
-}), UserController.logout);
+}), UserController.login);
+
+router.get('/auth/logout', UserController.logout);
 
 // router.put('/update', passport.authenticate("jwt", { session: false }), UserController.update);
 // router.patch('/update', passport.authenticate("jwt", { session: false }), UserController.update);

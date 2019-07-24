@@ -11,7 +11,7 @@ async function index(req, res, next) {
       });
       return res.send(emails);
     }).catch(err => {
-      next(new HTTPError(err.status, err.message));
+      next(new DatabaseError(err.status, err.message));
     })
 }
 
@@ -63,8 +63,6 @@ function addProjectToUser(userId, projectId){
       if (err) {
         return next(new DatabaseError(err.status, err.message));
       }
-      console.log("-=-=-=-=-=-=-=-=");
-      console.log(response);
       return model;
     }
   );
@@ -79,8 +77,6 @@ function activateProject(projectId){
       if (err) {
         return next(new DatabaseError(err.status, err.message));
       }
-      console.log("-=-=-=-=-=-=-=-=");
-      console.log(response);
       return model;
     }
   );
@@ -120,7 +116,6 @@ async function login(req, res) {
   
   //Adds new project to existing user if a projectId is passed in
   if(projectId){
-    
     // Adds project to user on successful login
     await addProjectToUser(user._id, projectId);
     

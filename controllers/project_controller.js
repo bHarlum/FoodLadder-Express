@@ -1,44 +1,41 @@
 const ProjectModel = require("./../database/models/project_model");
 const generator = require("./../mailer/generator");
 
-// 
-async function index(req, res) {
-  let response = genericError();
-  try{
-    const projects = await ProjectModel.find();
-    response = projects;
-  } catch (error) {
-    console.log(error);
-    response = genericError(error);
-  }
-  res.send(response);
+// Returns an array of all projects
+function index(req, res, next) {
+  ProjectModel.find()
+    .then(projects => {
+      return res.send(projects);
+    }).catch(err =>{
+      next(new HTTPError(err.status, err.message));
+    });
 }
 
 // REQUIREMENTS: id for the project you want to retrieve
 // KEY: 'id'
-async function show(req, res) {
-  let response = genericError();
-  try{
-    const project = await ProjectModel.findOne({ _id: req.params.id});
-    response = project;
-  }catch (error){
-    console.log(error.message);
-    response = null;
-  }
-  res.send(response);
+async function show(req, res, next) {
+  console.log("running project show");
+  ProjectModel.findOne({ _id: req.params.id})
+    .then(project => {
+      console.log("project show returned");
+      console.log(project);
+      res.send(project);
+    }).catch(err => {
+      next(new HTTPError(err.status, err.message));
+    });
 }
 
 // REQUIREMENTS: copy of updated object.
 // KEY: 'updatedProject'
 async function update(req, res) {
-  const {updatedProject, projectId} =  req.body;
+  const {updatedProject, projectId} = req.body;
   ProjectModel.findOneAndUpdate(
     { _id: projectId },
     { ...updatedProject }
-  ).then(response => {
-    res.send(response);
+  ).then(project => {
+    res.send(project);
   }).catch(err => {
-    res.send(err);
+    next(new HTTPError(err.status, err.message));
   });
 }
 
@@ -46,33 +43,43 @@ async function update(req, res) {
 // KEY: 'newProject'
 async function create(req, res) {
   const {newProject} = req.body;
+  
   try {
-    const project = await ProjectModel.create(newProject)
-      await generator({
+    const project = await ProjectModel.create(newProject);
+
+    // Creates and sends an email to the project administrator
+    await generator({
       email: project.users[0].email, 
       projectName: project.name,
       name: newProject.userName, 
       code: project._id,
       address: req.headers.origin,
     });
-    res.send("success");
+
+    res.send(project);
   } 
-  catch (error){
-    res.status(500);
-    res.send("Server error");
+  catch (err){
+    next(new HTTPError(err.status, err.message));
   }
 }
 
 function findCurrent(req, res) {
-  const { user } = req;
-  const projects = user.projects.map(el => {
-    return el.projectId;
-  });
-  ProjectModel.find({ _id: {
-    $in: projects
-  }}, function(err, docs){
-    res.send(docs);
-  });
+  try {
+    const { user } = req;
+    const projects = user.projects.map(el => {
+      return el.projectId;
+    });
+    ProjectModel.find({ _id: {
+      $in: projects
+    }}, function(err, docs){
+      if(err) {
+        next(new DatabaseError(err.status, err.message));
+      }
+      res.send(docs);
+    });
+  } catch (err) {
+    next(new HTTPError(err.status, err.message));
+  }
 }
 
 async function uploadFile(req, res) {
@@ -88,12 +95,6 @@ async function uploadFile(req, res) {
       res.send("Success!");
     }
     );
-}
-
-function genericError(error){
-  return error ? 
-    `Error: While trying to ${genericError.caller} on Project-controller: " + ${error}` : 
-    `Error: Unhandled case. ${genericError.caller} on Project-controller.`;
 }
 
 module.exports = {

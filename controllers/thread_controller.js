@@ -1,14 +1,15 @@
 const ThreadModel = require("./../database/models/thread_model");
 const UserModel = require("./../database/models/user_model");
 
+// get all threads
 async function index(req, res) {
-  // get all threads
-  try {
-    const threads = await ThreadModel.find();
-    threads.length == 0 ? res.send(null) : res.send(threads);
-  } catch(err) {
-    console.log("Encountered an error while trying to get all threads " +  err);
-  }
+
+  ThreadModel.find()
+    .then(threads => {
+      return threads.length == 0 ? res.send(null) : res.send(threads);
+    }).catch(err => {
+      next(new DatabaseError(err.status, err.message));
+    });
 }
 
 // REQUIREMENTS: id of desired object
@@ -69,26 +70,17 @@ async function update(req, res) {
 
 // REQUIREMENTS: A copy of the new Object
 // KEY: 'newThread'
-async function create(req, res) {
+async function create(req, res, next) {
+
   // unpacking required values from body.
-  const {newThread} = req.body;
+  const { newThread } = req.body;
 
-  // declares and sets default value for response.
-  let response = "Default response for thread-create function: Something has gone wrong!";
-
-  // Checks to see if newThread has a value.
-  if (newThread){
-    try {
-      const thread = await ThreadModel.create(newThread);
-      response = thread;
-    }
-    catch (error) {
-      response = customErrorMessage(error);;
-    }
-  } else response = "no value found for 'newThread'."
-
-  console.log("Thread create method running: " + response);
-  res.send(response);
+  ThreadModel.create(newThread)
+    .then(thread => {
+      res.send(thread);
+    }).catch(err => {
+      next(new DatabaseError(err.status, err.message));
+    });
 }
 
 // REQUIREMENTS: the id of the record you want to delete
