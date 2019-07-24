@@ -24,8 +24,8 @@ async function show(req, res, next) {
 
 // REQUIREMENTS: copy of updated object.
 // KEY: 'updatedProject'
-async function update(req, res) {
-  const {updatedProject, projectId} = req.body;
+function update(req, res) {
+  const {updatedProject, projectId} =  req.body;
   ProjectModel.findOneAndUpdate(
     { _id: projectId },
     { ...updatedProject }
@@ -79,7 +79,7 @@ function findCurrent(req, res) {
   }
 }
 
-async function uploadFile(req, res) {
+function uploadFile(req, res) {
   const { id } = req.headers;
   const project = ProjectModel.findOneAndUpdate({_id: id},
     {$push: {files: {link: req.file.key, size: req.file.size}}},
