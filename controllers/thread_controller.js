@@ -10,7 +10,6 @@ function index(req, res) {
     }).catch(err => {
       next(new DatabaseError(err.status, err.message));
     });
-
 }
 
 // REQUIREMENTS: id of desired object
@@ -28,6 +27,21 @@ function show(req, res) {
     next(new DatabaseError(err.status, err.message));
   });
 
+}
+
+// REQUIREMENTS: A copy of the new Object
+// KEY: 'newThread'
+async function create(req, res, next) {
+
+  // unpacking required values from body.
+  const { newThread } = req.body;
+
+  ThreadModel.create(newThread)
+    .then(thread => {
+      res.send(thread);
+    }).catch(err => {
+      next(new DatabaseError(err.status, err.message));
+    });
 }
 
 // REQUIREMENTS: Copy of updated object
@@ -55,21 +69,6 @@ function update(req, res) {
     );
     res.send(thread);
   });
-}
-
-// REQUIREMENTS: A copy of the new Object
-// KEY: 'newThread'
-async function create(req, res, next) {
-
-  // unpacking required values from body.
-  const { newThread } = req.body;
-
-  ThreadModel.create(newThread)
-    .then(thread => {
-      res.send(thread);
-    }).catch(err => {
-      next(new DatabaseError(err.status, err.message));
-    });
 }
 
 // REQUIREMENTS: the id of the record you want to delete

@@ -19,8 +19,8 @@ async function index(req, res, next) {
 function show(req, res) {
   try {
     const { user } = req;
-    const { _id: id, firstName, lastName, admin } = user;
-    return res.send({ id, firstName, lastName, admin});
+    const { _id: id, firstName, lastName, admin, notifications } = user;
+    return res.send({ id, firstName, lastName, admin, notifications });
   } catch(err) {
     return next(new HTTPError(err.status, err.message));
   }
