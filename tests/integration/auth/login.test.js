@@ -4,7 +4,6 @@ const app = require('./../../../app');
 const testConnection = require("./../../test_db_connect");
 const JWTService = require("./../../../services/jwt_service");
 
-
 testConnection();
 
 describe("Login with a created user.", () => {
