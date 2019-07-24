@@ -1,7 +1,5 @@
 const nodemailer = require('nodemailer');
 require('dotenv').config();
-// const mailFile = require("./mail.html");
-const fs = require("fs");
 
 // REQUIREMENTS: Object: target = {name: String, email: String}
 function mailer(target, email){

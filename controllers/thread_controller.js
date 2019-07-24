@@ -2,70 +2,59 @@ const ThreadModel = require("./../database/models/thread_model");
 const UserModel = require("./../database/models/user_model");
 
 // get all threads
-async function index(req, res) {
+function index(req, res) {
 
   ThreadModel.find()
     .then(threads => {
-      return threads.length == 0 ? res.send(null) : res.send(threads);
+      return threads.length === 0 ? res.send(null) : res.send(threads);
     }).catch(err => {
       next(new DatabaseError(err.status, err.message));
     });
+
 }
 
 // REQUIREMENTS: id of desired object
 // KEY: 'id'
-async function show(req, res) {
-  let response  = "Default response for thread-show function. Something has gone wrong";
+function show(req, res) {
+
   const { id } = req.params;
-  console.log(id);
-  try {
-    // Using findOneAndUpdate over findOne to update the view count on each request.
-    const thread = await ThreadModel.findOneAndUpdate( { _id: id }, {$inc: {views: 1}}, {new: true});
-    response = thread;
-  } catch (error) {
-      response = "Error: Ran into an error while trying to get/update a thread. " + error;
-    }
-  res.send(response);  
+
+  ThreadModel.findOneAndUpdate(
+    { _id: id },
+    {$inc: {views: 1}}, {new: true}
+  ).then(thread => {
+    res.send(thread);
+  }).catch(err => {
+    next(new DatabaseError(err.status, err.message));
+  });
+
 }
 
 // REQUIREMENTS: Copy of updated object
 // KEY: 'updatedThread'
-async function update(req, res) {
-  console.log("Added new post to thread");
+function update(req, res) {
   // Unpacking request
   const {updatedThread, userId} = req.body;
+  const { id } = req.params;
 
-  // declares and sets default value for response
-  let response = "Default response for thread-update function: Something has gone wrong!";
-
-  // checks to see if updatedThread has a value.
-  if(!updatedThread) {response = "No data recieved, nothing has been updated.";}
-  else {
-  // Attempting to update thread
-    try {
-      const thread = await ThreadModel.findOneAndUpdate({ 
-        _id: req.params.id 
-      }, updatedThread, { new: true });
-
-      const notification = { category: "threadReply" };
-
-      const newUser = await UserModel.findByIdAndUpdate(
-        userId,
-        {$push: {notifications: { ...notification}}},
-        {safe: true, upsert: true},
-        function(err, model) {
-            console.log(err);
+  ThreadModel.findOneAndUpdate(
+    { _id: id },
+    updatedThread,
+    { new: true }
+  ).then(async thread => {
+    const notification = { category: "threadReply" };
+    await UserModel.findByIdAndUpdate(
+      userId,
+      {$push: {notifications: { ...notification}}},
+      {safe: true, upsert: true},
+      function(err, model) {
+        if(err){
+          next(new DatabaseError(err.status, err.message));
         }
-      )
-      response = thread;
-    } 
-    catch (error) {
-      response = customErrorMessage(error);
-      console.log(error);
-    }
-  }
-  console.log("Running update function " + response);
-  res.send(response);
+      }
+    );
+    res.send(thread);
+  });
 }
 
 // REQUIREMENTS: A copy of the new Object
@@ -89,29 +78,20 @@ async function destroy(req, res) {
   // unpacking body
   const {id} = req.body;
 
-  let response = "Default response for thread-destroy function: Something has gone wrong!";
-  if(id){
-    try{
-      await ThreadModel.deleteOne(id);
-    }catch (error){
-      response = customErrorMessage(error);
-      console.log(response);
-    }
-  }
-  res.send(response);
+  ThreadModel.deleteOne(id)
+    .then(response => {
+      res.send(response);
+    }).catch(err => {
+      next(new DatabaseError(err.status, err.message));
+    });
 }
 
 function upload(req, res) {
   if(req.error){
-    console.log(req.error);
     res.send(req.error);
   } else {
     res.send({key: req.file.key, size: req.file.size});
   }
-}
-
-function customErrorMessage(error){
-  return `Error: While trying to ${customErrorMessage.caller} on thread: " + ${error}`
 }
 
 module.exports = {
