@@ -25,7 +25,7 @@ router.post("/", celebrate({
     line1: Joi.string().required(),
     line2: Joi.string(),
     state: Joi.string(),
-    city: Joi.string().require(),
+    city: Joi.string().required(),
     postcode: Joi.string(),
     country: Joi.string().required(),
   }
