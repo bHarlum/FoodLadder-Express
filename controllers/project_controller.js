@@ -40,20 +40,23 @@ async function update(req, res) {
 // KEY: 'newProject'
 async function create(req, res) {
   const {newProject} = req.body;
+  
   try {
-    const project = await ProjectModel.create(newProject)
-      await generator({
+    const project = await ProjectModel.create(newProject);
+
+    // Creates and sends an email to the project administrator
+    await generator({
       email: project.users[0].email, 
       projectName: project.name,
       name: newProject.userName, 
       code: project._id,
       address: req.headers.origin,
     });
-    res.send("success");
+
+    res.send(project);
   } 
-  catch (error){
-    res.status(500);
-    res.send("Server error");
+  catch (err){
+    next(new HTTPError(err.status, err.message));
   }
 }
 

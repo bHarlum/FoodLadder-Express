@@ -15,22 +15,6 @@ const ProjectSchema = new Schema({
     default: false,
   },
 
-  uniqueCode: {
-    value: {
-      type: String,
-    },
-
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-
-    expired: {
-      type: Boolean,
-      default: false,
-    },
-  },
-
   users: [{
     email: {
       type: String,

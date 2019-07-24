@@ -19,15 +19,23 @@ router.patch("/:id/update", ProjectController.update);
 
 router.post("/", celebrate({
   body: {
-    projectName: Joi.string().required(), 
-    userName: Joi.string().required(),
-    email: Joi.string().email({ minDomainSegments: 2 }).required(), 
-    line1: Joi.string().required(),
-    line2: Joi.string(),
-    state: Joi.string(),
-    city: Joi.string().required(),
-    postcode: Joi.string(),
-    country: Joi.string().required(),
+    newProject: {
+      userName: Joi.string().required(), 
+      name: Joi.string().required(),
+      users: Joi.array().items(Joi.object({
+        email: Joi.string().email({ minDomainSegments: 2 }).required(), 
+      })),
+      address: Joi.object({
+        line1: Joi.string().required(),
+        line2: Joi.string(),
+        state: Joi.string(),
+        city: Joi.string().required(),
+        postcode: Joi.string(),
+        country: Joi.string().required(),
+      }),
+      notifications: Joi.array(),
+      reports: Joi.array()
+    }
   }
 }), passport.authenticate("jwt", { session: false }), 
     ProjectController.create);
