@@ -14,8 +14,11 @@ function index(req, res, next) {
 // REQUIREMENTS: id for the project you want to retrieve
 // KEY: 'id'
 async function show(req, res, next) {
+  console.log("running project show");
   ProjectModel.findOne({ _id: req.params.id})
     .then(project => {
+      console.log("project show returned");
+      console.log(project);
       res.send(project);
     }).catch(err => {
       next(new HTTPError(err.status, err.message));

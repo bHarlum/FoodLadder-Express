@@ -31,7 +31,8 @@ router.post("/login", passport.authenticate('local', {
 }), celebrate({
   body: {
     email: Joi.string().email({ minDomainSegments: 2 }).required(),
-    password: Joi.string().required()
+    password: Joi.string().required(),
+    projectId: Joi.string()
   }
 }), UserController.login);
 
