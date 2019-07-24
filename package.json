@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --detectOpenHandles --coverage",
+    "test": "jest --detectOpenHandles",
+    "test-coverage": "jest --detectOpenHandles --coverage",
     "seed": "node database/seeds",
+    "test-seed": "node database/test_seeds",
     "dev-server": "nodemon index.js",
     "server": "forever -c \"nodemon --exitcrash -L\" index.js",
     "start": "node index.js",

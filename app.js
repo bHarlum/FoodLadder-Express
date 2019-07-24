@@ -15,7 +15,9 @@ app.use(cors({
     if(whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     }
-    else if(origin === undefined){
+    // create `DEV_TESTING` variable in env to allow tests through cors.
+    // WARNING: DO NOT CREATE THIS ENV VARIABLE ON PRODUCTION
+    else if(process.env.DEV_TESTING){
       callback(null, true);
     }
     else {
