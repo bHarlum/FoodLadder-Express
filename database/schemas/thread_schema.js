@@ -1,5 +1,6 @@
 const {Schema} = require("mongoose");
 const PostSchema = require("./post_schema");
+const FileSchema = require("./file_schema");
 
 
 const ThreadSchema = new Schema({
@@ -9,6 +10,8 @@ const ThreadSchema = new Schema({
   },
   
   posts: [PostSchema],
+
+  file: (FileSchema),
 
   views: {
     type: Number,

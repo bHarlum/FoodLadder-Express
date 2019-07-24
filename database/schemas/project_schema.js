@@ -29,7 +29,6 @@ const ProjectSchema = new Schema({
       type: Boolean,
       default: false,
     },
-    /// TODO MAYBE: Maybe add a used at for the unique code.
   },
 
   users: [{
@@ -57,7 +56,7 @@ const ProjectSchema = new Schema({
       lowercase: true,
     },
 
-    postCode: {
+    postcode: {
       type: String,
       lowercase: true,
     },
@@ -70,7 +69,6 @@ const ProjectSchema = new Schema({
 
     state: {
       type: String,
-      required: true,
       lowercase: true,
     },
 

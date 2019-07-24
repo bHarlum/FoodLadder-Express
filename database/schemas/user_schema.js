@@ -30,7 +30,12 @@ const UserSchema = new Schema({
     projectId: {
       // TODO: could be of Type ObjectId #####
       type: String,
-      default: null,
+    }
+  }],
+
+  threads: [{
+    threadId: {
+      type: String,
     }
   }],
 

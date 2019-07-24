@@ -36,6 +36,11 @@ const PostSchema = new Schema({
   createdAt: {
     type: Date,
     default: Date.now,
+  },
+
+  upvotes: {
+    type: Number,
+    default: 0
   }
 });
 
