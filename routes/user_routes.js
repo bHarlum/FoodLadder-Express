@@ -19,8 +19,11 @@ router.post('/register', celebrate({
   body: {
     firstName: Joi.string().required(), 
     lastName: Joi.string().required(), 
-    phone: Joi.string(), 
-    email: Joi.string().email({ minDomainSegments: 2 }).required(), 
+    phone: Joi.string()
+              .regex(/[0-9\+\-]/)
+              .error(new Error("That doesn't seem to be a valid phone number.")),
+    email: Joi.string()
+              .email({ minDomainSegments: 2 }).required(), 
     password: Joi.string().regex(/^[a-zA-Z0-9]{6,30}$/).required(), 
     projectId: Joi.string().required(), 
   }

@@ -56,7 +56,8 @@ async function register(req, res, next) {
 
 	UserModel.register({ firstName, lastName, phone, email }, password, async function(err, user) {
 		if (err) {
-      console.log(err);
+      res.status(err.status);
+      return res.send(err.message);
     }
 
     await UserModel.findByIdAndUpdate(
@@ -64,7 +65,11 @@ async function register(req, res, next) {
       {$push: {projects: {projectId}}},
       {upsert: true},
       function(err, model) {
-          console.log(err);
+        if (err) {
+          res.status(err.status);
+          return res.send(err.message);
+        }
+        return model;
       }
     );
     
@@ -72,8 +77,11 @@ async function register(req, res, next) {
       projectId,
       { activated: true },
       function(err, model) {
-        console.log("Updated project to activated")
-        console.log(err);
+        if (err) {
+          res.status(err.status);
+          return res.send(err.message);
+        }
+        return model;
       }
     );
  
