@@ -11,7 +11,7 @@ async function index(req, res, next) {
       });
       return res.send(emails);
     }).catch(err => {
-      next(new HTTPError(err.status, err.message));
+      next(new DatabaseError(err.status, err.message));
     })
 }
 
