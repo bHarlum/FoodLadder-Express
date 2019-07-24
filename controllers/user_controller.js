@@ -54,7 +54,7 @@ function update(req, res) {
 }
 
 // Adds project to user
-function addProjectToUser(userId){
+function addProjectToUser(userId, projectId){
   UserModel.findByIdAndUpdate(
     userId,
     {$push: {projects: {projectId}}},
@@ -63,6 +63,8 @@ function addProjectToUser(userId){
       if (err) {
         return next(new DatabaseError(err.status, err.message));
       }
+      console.log("-=-=-=-=-=-=-=-=");
+      console.log(response);
       return model;
     }
   );
@@ -77,6 +79,8 @@ function activateProject(projectId){
       if (err) {
         return next(new DatabaseError(err.status, err.message));
       }
+      console.log("-=-=-=-=-=-=-=-=");
+      console.log(response);
       return model;
     }
   );
@@ -93,7 +97,7 @@ async function register(req, res, next) {
     }
 
     // Adds project to user on successful register
-    await addProjectToUser(user._id);
+    await addProjectToUser(user._id, projectId);
     
     // Changes 'activated' status of project to true
     await activateProject(projectId);
@@ -118,7 +122,7 @@ async function login(req, res) {
   if(projectId){
     
     // Adds project to user on successful login
-    await addProjectToUser(user._id);
+    await addProjectToUser(user._id, projectId);
     
     // Changes 'activated' status of project to true
     await activateProject(projectId);
